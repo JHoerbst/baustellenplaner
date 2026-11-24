@@ -112,6 +112,15 @@ export type Invoice = InProject & {
   attachments?: Attachment[] | null;
 };
 
+export type Photo = InProject & {
+  attachment: Attachment;
+  thumb?: Attachment | null;
+  room?: string | null;
+  takenOn: string;
+  description?: string | null;
+  tradeId?: string | null;
+};
+
 export type Tables = {
   Project: Project;
   Trade: Trade;
@@ -124,6 +133,7 @@ export type Tables = {
   Helper: Helper;
   Note: Note;
   Invoice: Invoice;
+  Photo: Photo;
 };
 export type Kind = keyof Tables;
 export type New<A extends Kind> = Omit<Tables[A], 'id' | 'createdAt' | 'updatedAt'>;

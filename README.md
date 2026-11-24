@@ -21,6 +21,8 @@ und am Rechner.
   Anrufs; Firma und Gewerk lassen sich später zuordnen
 - **Pläne**: Grundrisse und Schnitte als PDF oder Bild, in der App zum
   Hineinzoomen und Verschieben (Finger, Mausrad, Doppeltipp)
+- **Fotos**: nach Raum und Datum abgelegt, zum Hineinzoomen; die App erinnert
+  vor Putz, Estrich und Trockenbau ans Fotografieren der Leitungen
 - **Firmen**: Kontakte mit Anrufen und E-Mail per Tipp
 - **Projekt**: Gewerke einzeln zuschalten oder eigene anlegen, auch als
   Eigenleistung, Mitglieder per E-Mail einladen,

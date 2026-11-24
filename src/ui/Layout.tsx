@@ -10,7 +10,8 @@ const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPath?: s
   { path: '/angebote', label: 'Kosten', Icon: Euro, alsoPath: '/rechnungen' },
   { path: '/termine', label: 'Termine', Icon: CalendarDays },
   { path: '/aufgaben', label: 'Aufgaben', Icon: ListChecks },
-  { path: '/plaene', label: 'Pläne', Icon: DraftingCompass },
+  // Plans and photos share one slot, see DocsSwitch.
+  { path: '/plaene', label: 'Pläne', Icon: DraftingCompass, alsoPath: '/fotos' },
 ];
 
 export function Layout() {
@@ -77,6 +78,16 @@ export function CostsSwitch() {
     <nav className="toggle" aria-label="Kosten">
       <NavLink to="/angebote">Angebote</NavLink>
       <NavLink to="/rechnungen">Rechnungen</NavLink>
+    </nav>
+  );
+}
+
+/** Switch between the two pages under "Pläne". */
+export function DocsSwitch() {
+  return (
+    <nav className="toggle" aria-label="Pläne und Fotos">
+      <NavLink to="/plaene">Pläne</NavLink>
+      <NavLink to="/fotos">Fotos</NavLink>
     </nav>
   );
 }

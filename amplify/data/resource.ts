@@ -161,6 +161,20 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 
+  // Site photos by room and date. "thumb" is a small preview made in the
+  // browser so the grid does not load the originals.
+  Photo: a
+    .model({
+      ...inProject,
+      attachment: a.ref('Attachment').required(),
+      thumb: a.ref('Attachment'),
+      room: a.string(),
+      takenOn: a.date().required(),
+      description: a.string(),
+      tradeId: a.id(),
+    })
+    .authorization((allow) => [allow.groupDefinedIn('group')]),
+
   // Floor plans, sections, building permit drawings - one file per plan.
   Plan: a
     .model({

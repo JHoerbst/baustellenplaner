@@ -37,7 +37,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
 
 ## A. Für den eigenen Umbau, hoher Nutzen
 
-- [ ] **Fotos nach Raum und Datum.** Am häufigsten genannter Rat in den
+- [x] **Fotos nach Raum und Datum.** Am häufigsten genannter Rat in den
   Foren: vor dem Verputzen und vor dem Estrich jede Wand mit Maßstab im Bild
   fotografieren, damit man später weiß, wo Leitungen liegen. Braucht: Fotos
   mit Raum, Datum und Beschreibung, Ansicht je Raum, Erinnerung im Zeitplan

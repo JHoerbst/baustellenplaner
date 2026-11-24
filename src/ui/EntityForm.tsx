@@ -42,6 +42,8 @@ export type Field = {
   type?: 'text' | 'textarea' | 'date' | 'datetime-local' | 'amount' | 'integer' | 'select' | 'tel' | 'email' | 'url';
   options?: { value: string; label: string }[];
   required?: boolean;
+  /** Earlier values offered while typing (plain text fields only). */
+  suggestions?: string[];
   /** Two half fields share a row. */
   half?: boolean;
   /** Show the field only when the current inputs call for it; hidden fields are saved as empty. */
@@ -142,7 +144,16 @@ export function EntityForm({
               ) : f.type === 'amount' ? (
                 <input type="text" inputMode="decimal" placeholder="€ inkl. USt." {...common} />
               ) : (
-                <input type={f.type ?? 'text'} {...common} />
+                <>
+                  <input type={f.type ?? 'text'} list={f.suggestions ? `${common.id}-list` : undefined} {...common} />
+                  {f.suggestions && (
+                    <datalist id={`${common.id}-list`}>
+                      {f.suggestions.map((s) => (
+                        <option key={s} value={s} />
+                      ))}
+                    </datalist>
+                  )}
+                </>
               )}
             </div>
           );

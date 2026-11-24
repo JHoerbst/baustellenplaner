@@ -20,7 +20,8 @@ No test setup and no linter; `npm run typecheck` is the verification step.
 - `src/lib/types.ts` mirrors the schema in `amplify/data/resource.ts` by hand; change both together.
 - `src/ui/EntityForm.tsx`: one generic form for all tables (field list in, values out; empty inputs become `null`; `showWhen` hides fields conditionally).
 - `src/ui/Attachments.tsx`: file list on an entry, also usable before the entry is saved.
-- `src/ui/PlanViewer.tsx`: zoomable view for plans. PDFs are rendered by pdf.js (lazy-loaded): a low-resolution overview plus a detail canvas that redraws the visible region at screen resolution after each gesture. Images are shown directly.
+- `src/lib/fileUrl.ts`: `useFileUrl` gives a cached URL for showing a stored file in `<img>`.
+- `src/ui/PlanViewer.tsx`: zoomable view for plans and photos. PDFs are rendered by pdf.js (lazy-loaded): a low-resolution overview plus a detail canvas that redraws the visible region at screen resolution after each gesture. Images are shown directly.
 - Access control: one Cognito group per project (`p-<uuid>`), models use `allow.groupDefinedIn('group')`. `amplify/functions/project` manages groups and invitations, `amplify/functions/files` issues signed S3 URLs; both check membership via `functions/shared/group.ts`.
 - Self sign-up is disabled in `backend.ts`; accounts are created by invitation.
 

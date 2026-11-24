@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useApp } from '../lib/app';
+import { photoReminders } from '../lib/reminders';
 import { formatDate, euro, today, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
 
 const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -8,7 +9,7 @@ const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, me } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, me, assignments } = useApp();
   const toPay = invoices.filter((r) => !r.paid);
   const companyName = (id?: string | null) => companies.find((f) => f.id === id)?.name;
 
@@ -69,6 +70,12 @@ export default function Overview() {
       <p className="legend">
         <i className="mark mark--appointment" /> Termin <i className="mark mark--deadline" /> Frist
       </p>
+
+      {photoReminders(assignments, trades).map((r) => (
+        <p key={r.id} className="reminder">
+          {r.tradeName} kommt {relativeDay(r.startDate)}: vorher Wände und Böden <Link to="/fotos">fotografieren</Link>.
+        </p>
+      ))}
 
       <section className="block">
         <h2>
