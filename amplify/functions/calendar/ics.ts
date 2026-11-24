@@ -50,9 +50,14 @@ function fold(line: string): string {
 /** Default length of an appointment without an end time. */
 const DEFAULT_MINUTES = 60;
 
-export function toIcs(name: string, events: CalendarEvent[]): string {
+/**
+ * Timed entries are written as UTC instants, which every calendar converts
+ * correctly. The time zone only tells the calendar app which zone the feed
+ * belongs to; without it Google files the calendar under GMT+0.
+ */
+export function toIcs(name: string, events: CalendarEvent[], timezone: string): string {
   const now = utcStamp(new Date().toISOString());
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Baustellenplaner//DE', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', `X-WR-CALNAME:${escapeText(name)}`];
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Baustellenplaner//DE', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', `X-WR-CALNAME:${escapeText(name)}`, `X-WR-TIMEZONE:${timezone}`];
 
   for (const e of events) {
     lines.push('BEGIN:VEVENT', `UID:${e.id}@baustellenplaner`, `DTSTAMP:${e.changed ? utcStamp(e.changed) : now}`);

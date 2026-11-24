@@ -48,6 +48,9 @@ export default function ProjectPage() {
 
   if (!project) return null;
 
+  // The feed states which time zone it belongs to; take the one of this device.
+  const timezone = encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
   // Two UUIDs give 244 random bits; the token is the only thing protecting the feed.
   const newCalendarToken = () =>
     store.update('Project', project.id, { calendarToken: `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, '') });
@@ -204,8 +207,8 @@ export default function ProjectPage() {
                 selbst ab, bei Google kann das einige Stunden dauern.
               </p>
               {[
-                { label: 'Nur Termine', url: `${calendarUrl}?p=${project.id}&t=${project.calendarToken}&nur=termine` },
-                { label: 'Termine, Fristen und Einsätze', url: `${calendarUrl}?p=${project.id}&t=${project.calendarToken}` },
+                { label: 'Nur Termine', url: `${calendarUrl}?p=${project.id}&t=${project.calendarToken}&tz=${timezone}&nur=termine` },
+                { label: 'Termine, Fristen und Einsätze', url: `${calendarUrl}?p=${project.id}&t=${project.calendarToken}&tz=${timezone}` },
               ].map((link) => (
                 <div key={link.label} className="field calendar-link">
                   <label htmlFor={`cal-${link.label}`}>{link.label}</label>

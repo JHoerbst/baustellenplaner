@@ -38,17 +38,22 @@ function sameToken(given: string, expected: string): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
+/** Used when the link carries no time zone, e.g. links created before it was added. */
+const DEFAULT_TIMEZONE = 'Europe/Vienna';
+/** IANA names such as Europe/Vienna; anything else falls back to the default. */
+const TIMEZONE = /^[A-Za-z_]+(\/[A-Za-z0-9_+-]+){1,2}$/;
+
 const notFound = { statusCode: 404, headers: { 'content-type': 'text/plain; charset=utf-8' }, body: 'Kalender nicht gefunden.' };
 
 type UrlEvent = { queryStringParameters?: Record<string, string | undefined> };
 
 /**
- * GET ?p=<project id>&t=<token>[&nur=termine]
+ * GET ?p=<project id>&t=<token>[&nur=termine][&tz=Europe/Vienna]
  * Without "nur=termine" the feed also carries deadlines and the trades'
  * assignments as all-day entries.
  */
 export const handler = async (event: UrlEvent) => {
-  const { p: projectId, t: token, nur } = event.queryStringParameters ?? {};
+  const { p: projectId, t: token, nur, tz } = event.queryStringParameters ?? {};
   if (!projectId || !token) return notFound;
 
   const project = (await db.send(new GetCommand({ TableName: tableName('Project'), Key: { id: projectId } }))).Item;
@@ -109,6 +114,6 @@ export const handler = async (event: UrlEvent) => {
       // Calendar apps poll on their own schedule; do not let anything in between keep an old copy.
       'cache-control': 'no-store',
     },
-    body: toIcs(project.name ?? 'Baustellenplaner', events),
+    body: toIcs(project.name ?? 'Baustellenplaner', events, tz && TIMEZONE.test(tz) ? tz : DEFAULT_TIMEZONE),
   };
 };
