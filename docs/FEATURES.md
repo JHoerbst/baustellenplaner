@@ -125,15 +125,15 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
 ## D. Verbesserungen am Bestehenden
 
 - [ ] App-Symbol fürs iPhone (PNG).
-- [ ] Bedienung am echten Handy prüfen: Zoom mit zwei Fingern im Plan,
+- [x] Bedienung am echten Handy prüfen: Zoom mit zwei Fingern im Plan,
   seitliches Wischen im Zeitplan.
-- [ ] Datei-Upload über die Oberfläche durchtesten (Beleg, Anhang, Plan).
+- [x] Datei-Upload über die Oberfläche durchtesten (Beleg, Anhang, Plan).
 - [ ] Suche über alle Bereiche.
 - [ ] Aufgaben: wiederkehrend und aus einer Notiz heraus anlegen.
 - [ ] Helfer: Essenswünsche als eigenes Feld statt in der Notiz.
 - [ ] Notizen: per Diktat (macht am Handy schon die Tastatur) und mit Foto.
 - [ ] Automatische Tests.
-- [ ] Backend deployen und Login, Einladung, Abgleich und Upload prüfen.
+- [x] Backend deployen und Login, Einladung, Abgleich und Upload prüfen.
 
 ## E. Bewusst nicht
 
