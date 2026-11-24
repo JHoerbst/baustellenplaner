@@ -32,4 +32,4 @@ No test setup and no linter; `npm run typecheck` is the verification step.
 - Everything the user sees is German with real umlauts, addressing the user as "du". That includes route paths (`/angebote`, `/zeitplan`), error messages thrown for users, and the trade names in `src/lib/tradeCatalog.ts`.
 - Domain glossary: Gewerk = trade, Firma = company, Angebot = quote, Termin = appointment, Aufgabe = task, Einsatz = assignment (a trade's period on site), Helfer = helper, Rechnung = invoice, Notiz = note, Eigenleistung = `selfPerformed`.
 - The S3 bucket has `keepOnDelete: true`; do not rename the storage resource.
-- Amplify builds with `npm ci`: commit the lockfile after changing dependencies.
+- Amplify builds with `npm ci`, which fails when the lockfile is out of sync. After every dependency change run `npm install --package-lock-only` (a plain `npm install <pkg>` leaves out bundled dependencies and broke a deploy) and check with `npm ci --dry-run` before pushing.
