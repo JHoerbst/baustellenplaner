@@ -40,8 +40,7 @@ und am Rechner.
   Eigenleistung, Mitglieder per E-Mail einladen,
   mehrere Projekte
 
-Geplant: Kalender-Abo (iCal),
-Bautagebuch, Mängelliste, Entscheidungen.
+Was noch offen ist, steht in [docs/FEATURES.md](docs/FEATURES.md).
 
 ## Ausprobieren ohne Cloud
 

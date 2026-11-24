@@ -64,12 +64,12 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   Werkzeuge.
 - [ ] **Kalender-Abo.** Termine, Fristen und Einsätze im Handy-Kalender.
   Geht erst mit Backend.
-- [ ] **Bautagebuch.** Je Tag: wer war da, was wurde gemacht, Lieferungen,
-  Besonderheiten, Fotos. Anwesende lassen sich aus dem Zeitplan vorschlagen.
-  Für private Bauherren nicht Pflicht, aber ohne Bauleitung empfohlen.
 
 ## B. Für den eigenen Umbau, mittlerer Nutzen
 
+- [ ] **Tagesansicht statt Bautagebuch.** Für ein Datum zusammenziehen, was
+  schon erfasst ist: wer da war (Zeitplan), Lieferungen, Fotos, Notizen,
+  Mängel. Braucht keine neue Tabelle und keine zusätzliche Tipparbeit.
 - [ ] **Leistungsumfang im Angebotsvergleich.** Preise allein täuschen:
   ein Angebot enthält Material, das andere nicht, ein drittes keine
   Entsorgung. Braucht: je Angebot kurze Liste „enthalten / nicht enthalten".
@@ -117,7 +117,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   E-Mail-Signatur.
 - [ ] **Belege und Angebote auslesen.** Betrag, Datum und Händler aus Foto
   oder PDF vorschlagen. Braucht einen KI-Dienst und das Backend.
-- [ ] **Wetter im Bautagebuch.** Automatisch zum Tag eintragen.
+- [ ] **Wetter in der Tagesansicht.** Automatisch zum Tag eintragen.
 - [ ] **Finanzierung.** Eigenkapital und Kredit gegen Ausgaben, Abruf von
   Kreditraten.
 - [ ] **Weitere Sprachen.** Die Oberfläche ist derzeit nur deutsch.
@@ -138,6 +138,10 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
 ## E. Bewusst nicht
 
 - Budget je Gewerk.
+- Ein eigenes Bautagebuch zum Ausfüllen. Für private Bauherren ist es keine
+  Pflicht, und Zeitplan, Fotos, Notizen, Bestellungen und Mängel halten das
+  meiste davon schon mit Datum fest. Sinnvoll wird es erst bei einem
+  größeren Vertrag mit festen Terminen, bei dem Streit zu erwarten ist.
 - Garantiedatum für Einkäufe; der Beleg genügt.
 - Funktionen für Betriebe: Arbeitszeiten von Mitarbeitern, Maschinen,
   Aufmaß, Abrechnung.
