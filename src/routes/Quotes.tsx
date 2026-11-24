@@ -5,6 +5,7 @@ import { formatDate, euro, parseNumber, today, daysUntil } from '../lib/format';
 import { orderStatus } from '../lib/orders';
 import { STATUS, type Quote, type QuoteExtra, type QuoteStatus, type Attachment } from '../lib/types';
 import { Attachments } from '../ui/Attachments';
+import { BudgetSummary } from '../ui/BudgetSummary';
 import { EntityForm, type Field } from '../ui/EntityForm';
 import { CostsSwitch, Empty, PageTitle } from '../ui/Layout';
 
@@ -110,6 +111,7 @@ export default function Quotes() {
         Angebote
       </PageTitle>
       <CostsSwitch />
+      <BudgetSummary />
 
       {quotes.length === 0 && (
         <Empty>Noch kein Angebot. Trag ein, sobald du eine Firma angefragt hast, dann siehst du hier, wer noch nicht geantwortet hat.</Empty>

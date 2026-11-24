@@ -8,6 +8,9 @@ und am Rechner.
 
 - **Übersicht**: die nächsten 14 Tage auf einen Blick, kommende Termine,
   Angebote, die ablaufen oder unbeantwortet sind, fällige Aufgaben
+- **Budget**: ein Gesamtbudget mit Puffer; die App rechnet aus Rechnungen,
+  Aufträgen, Bestellungen und den günstigsten offenen Angeboten hoch und
+  warnt, bevor es eng wird
 - **Angebote**: pro Gewerk nebeneinander, günstigstes zuerst, mit Abstand zum
   günstigsten, Stand (angefragt bis beauftragt), Gültigkeit, PDF und Fotos als Anhang
 - **Zeitplan**: vier Wochen im Blick, Gewerke als Balken, Helfer pro Tag

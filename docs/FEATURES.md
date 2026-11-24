@@ -58,7 +58,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   Rechnung-Angebot gibt es schon, die Summe daraus noch nicht.
 - [x] **Nachträge.** Zusatzaufträge zu einem beauftragten Angebot mit
   Betrag und Datum, damit die Auftragssumme stimmt.
-- [ ] **Gesamtbudget mit Puffer.** Ein Betrag für das ganze Projekt, dazu
+- [x] **Gesamtbudget mit Puffer.** Ein Betrag für das ganze Projekt, dazu
   Ausgaben und noch offene Aufträge, mit Warnung. Budget je Gewerk bleibt
   bewusst weg. Kostenkontrolle ist die Kernfunktion fast aller verglichenen
   Werkzeuge.

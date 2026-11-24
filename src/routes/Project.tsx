@@ -10,6 +10,8 @@ import Start from './Start';
 const PROJECT_FIELDS: Field[] = [
   { name: 'name', label: 'Name', required: true },
   { name: 'address', label: 'Adresse der Baustelle' },
+  { name: 'budget', label: 'Gesamtbudget', type: 'amount', half: true },
+  { name: 'reserve', label: 'davon Puffer', type: 'amount', half: true },
   { name: 'householdSize', label: 'Wie viele seid ihr selbst? (zählt beim Essen im Zeitplan mit)', type: 'integer' },
   { name: 'note', label: 'Notiz', type: 'textarea' },
 ];

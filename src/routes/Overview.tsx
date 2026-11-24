@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useApp } from '../lib/app';
+import { BudgetSummary } from '../ui/BudgetSummary';
 import { orderWarning } from '../lib/materialOrders';
 import { orderStatus } from '../lib/orders';
 import { photoReminders } from '../lib/reminders';
@@ -122,6 +123,7 @@ export default function Overview() {
         <h2>
           <Link to="/angebote">Angebote</Link>
         </h2>
+        <BudgetSummary compact />
         <p className="figure">
           <strong>{euro(awardedTotal)}</strong> beauftragt, {invoicedTotal > 0 && `davon ${euro(invoicedTotal)} verrechnet, `}{awardedCount} von {trades.filter((g) => !g.selfPerformed).length} Gewerken vergeben
         </p>

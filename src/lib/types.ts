@@ -5,7 +5,14 @@ export type Attachment = { key: string; name: string; size?: number | null };
 type Base = { id: string; group: string; createdAt?: string; updatedAt?: string };
 type InProject = Base & { projectId: string };
 
-export type Project = Base & { name: string; address?: string | null; note?: string | null; householdSize?: number | null };
+export type Project = Base & {
+  name: string;
+  address?: string | null;
+  note?: string | null;
+  householdSize?: number | null;
+  budget?: number | null;
+  reserve?: number | null;
+};
 
 export type Trade = InProject & { name: string; sortOrder?: number | null; selfPerformed?: boolean | null };
 

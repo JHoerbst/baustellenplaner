@@ -47,6 +47,10 @@ const schema = a.schema({
       note: a.string(),
       // People in the owners' own household - counted for meals in the schedule.
       householdSize: a.integer(),
+      // One budget for the whole project; "reserve" is the part of it held
+      // back for surprises.
+      budget: a.float(),
+      reserve: a.float(),
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 
