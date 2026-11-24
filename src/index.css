@@ -1348,3 +1348,125 @@ a.sched-name {
   vertical-align: -1px;
   border-radius: 2px;
 }
+
+/* ---- Week agenda on the overview --------------------------------------- */
+
+/* One row per day. The date column is the quiet counterpart of the ruler
+   above: same numerals, no second block of yellow. */
+.week {
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.week-day {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  min-height: 56px;
+}
+
+.week-day + .week-day {
+  border-top: 1px solid var(--line);
+}
+
+.week-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  line-height: 1.1;
+  border-right: 1px solid var(--line);
+}
+
+.week-date span {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.week-date b {
+  font-family: var(--condensed);
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.week-day.is-weekend .week-date {
+  background: #f0f2f4;
+}
+
+.week-day.is-today .week-date {
+  background: var(--ink);
+  border-right-color: var(--ink);
+}
+
+.week-day.is-today .week-date span,
+.week-day.is-today .week-date b {
+  color: #fff;
+}
+
+/* Days with nothing on shrink, so the busy days stand out. */
+.week-day.is-free {
+  min-height: 34px;
+}
+
+.week-day.is-free .week-date {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.week-day.is-free .week-date b {
+  font-size: 1.05rem;
+}
+
+.week-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px 12px;
+}
+
+.week-day.is-free .week-items {
+  padding-block: 0;
+}
+
+.week-item {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  text-decoration: none;
+}
+
+.week-item time {
+  font-family: var(--condensed);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.week-item span {
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+.week-item strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.week-site {
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.week-item:focus-visible {
+  outline-offset: 2px;
+}

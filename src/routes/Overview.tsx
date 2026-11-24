@@ -4,9 +4,14 @@ import { BudgetSummary } from '../ui/BudgetSummary';
 import { orderWarning } from '../lib/materialOrders';
 import { orderStatus } from '../lib/orders';
 import { photoReminders } from '../lib/reminders';
-import { formatDate, euro, today, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
+import { formatDate, euro, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
 
 const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+/** The day-by-day agenda covers this many days, starting today. */
+const WEEK_DAYS = 7;
+/** Appointments after that week, shown as a short list. */
+const LATER_SHOWN = 3;
 
 /** The overview lists this many open tasks; the rest is one tap away. */
 const TASKS_SHOWN = 8;
@@ -47,7 +52,19 @@ export default function Overview() {
     };
   });
 
-  const upcoming = appointments.filter((t) => dayOf(t.start) >= today()).slice(0, 5);
+  // The week ahead, day by day: appointments and which trades are on site.
+  const tradeName = (id?: string | null) => trades.find((t) => t.id === id)?.name;
+  const week = days.slice(0, WEEK_DAYS).map(({ day, d }) => ({
+    day,
+    d,
+    items: appointments.filter((t) => dayOf(t.start) === day),
+    onSite: assignments
+      .filter((a) => a.startDate <= day && day <= a.endDate)
+      .map((a) => tradeName(a.tradeId))
+      .filter((name): name is string => !!name),
+  }));
+  const lastWeekDay = week[week.length - 1].day;
+  const later = appointments.filter((t) => dayOf(t.start) > lastWeekDay).slice(0, LATER_SHOWN);
 
   const openTasks = tasks
     .filter((a) => !a.done)
@@ -99,25 +116,49 @@ export default function Overview() {
 
       <section className="block">
         <h2>
-          <Link to="/termine">Nächste Termine</Link>
+          <Link to="/termine">Die nächsten sieben Tage</Link>
         </h2>
-        {upcoming.length === 0 ? (
-          <p className="empty">Kein Termin eingetragen.</p>
-        ) : (
-          <ul className="list">
-            {upcoming.map((t) => (
-              <li key={t.id} className="row">
-                <div className="row-when">
-                  <strong>{formatDate(t.start)}</strong>
-                  <span>{formatTime(t.start)}</span>
-                </div>
-                <div className="row-main">
-                  <strong>{t.title}</strong>
-                  <span>{[companyName(t.companyId), t.place].filter(Boolean).join(', ') || relativeDay(t.start)}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+        {/* One row per day, also for days without anything, so the shape of the week shows. */}
+        <ol className="week">
+          {week.map(({ day, d, items, onSite }, i) => (
+            <li key={day} className={['week-day', i === 0 && 'is-today', d.getDay() % 6 === 0 && 'is-weekend', !items.length && !onSite.length && 'is-free'].filter(Boolean).join(' ')}>
+              <div className="week-date">
+                <span>{i === 0 ? 'Heute' : WEEKDAY_NAMES[d.getDay()]}</span>
+                <b>{d.getDate()}</b>
+              </div>
+              <div className="week-items">
+                {items.map((t) => (
+                  <Link key={t.id} to="/termine" className="week-item">
+                    <time dateTime={t.start}>{formatTime(t.start)}</time>
+                    <span>
+                      <strong>{t.title}</strong>
+                      {[companyName(t.companyId), t.place].filter(Boolean).join(', ')}
+                    </span>
+                  </Link>
+                ))}
+                {onSite.length > 0 && <p className="week-site">Auf der Baustelle: {onSite.join(', ')}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+        {later.length > 0 && (
+          <>
+            <p className="hint">Danach</p>
+            <ul className="list">
+              {later.map((t) => (
+                <li key={t.id} className="row">
+                  <div className="row-when">
+                    <strong>{formatDate(t.start)}</strong>
+                    <span>{formatTime(t.start)}</span>
+                  </div>
+                  <div className="row-main">
+                    <strong>{t.title}</strong>
+                    <span>{[companyName(t.companyId), t.place].filter(Boolean).join(', ') || relativeDay(t.start)}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </section>
 
