@@ -8,11 +8,14 @@ import { formatDate, euro, today, isoDay, relativeDay, dayOf, daysUntil, formatT
 
 const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 
+/** The overview lists this many open tasks; the rest is one tap away. */
+const TASKS_SHOWN = 8;
+
 /** After this many days without a reply it is worth following up. */
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, me, assignments } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, me, assignments, store } = useApp();
   const orderWarnings = materialOrders.flatMap((o) => {
     const warning = orderWarning(o);
     return warning ? [{ id: o.id, title: o.title, ...warning }] : [];
@@ -49,7 +52,6 @@ export default function Overview() {
   const openTasks = tasks
     .filter((a) => !a.done)
     .sort((a, b) => (a.dueDate ?? '9').localeCompare(b.dueDate ?? '9'));
-  const dueSoon = openTasks.filter((a) => a.dueDate && daysUntil(a.dueDate) <= 7);
 
   // Quotes that need someone to act.
   const attention = quotes.flatMap((a) => {
@@ -220,20 +222,35 @@ export default function Overview() {
         <p className="figure">
           <strong>{openTasks.length}</strong> offen, davon {openTasks.filter((a) => a.assignee === me).length} bei dir
         </p>
-        {dueSoon.length > 0 && (
+        {openTasks.length > 0 && (
           <ul className="list">
-            {dueSoon.map((a) => (
+            {openTasks.slice(0, TASKS_SHOWN).map((a) => (
               <li key={a.id} className="row">
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={false}
+                  onChange={() => store.update('Task', a.id, { done: true })}
+                  aria-label={`${a.title} abhaken`}
+                />
                 <div className="row-main">
                   <strong>{a.title}</strong>
-                  <span className={daysUntil(a.dueDate!) < 0 ? 'is-urgent' : undefined}>
-                    fällig {relativeDay(a.dueDate!)}
-                    {a.assignee ? `, ${a.assignee}` : ''}
+                  <span>
+                    {a.dueDate && (
+                      <span className={daysUntil(a.dueDate) < 0 ? 'is-urgent' : undefined}>fällig {relativeDay(a.dueDate)}</span>
+                    )}
+                    {a.dueDate && a.assignee && ', '}
+                    {a.assignee}
                   </span>
                 </div>
               </li>
             ))}
           </ul>
+        )}
+        {openTasks.length > TASKS_SHOWN && (
+          <p className="hint">
+            <Link to="/aufgaben">und {openTasks.length - TASKS_SHOWN} weitere</Link>
+          </p>
         )}
       </section>
 
