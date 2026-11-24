@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useApp } from '../lib/app';
 import { today, relativeDay, longDay, dayOf, formatTime } from '../lib/format';
 import type { Appointment } from '../lib/types';
@@ -8,6 +9,15 @@ import { Empty, PageTitle } from '../ui/Layout';
 export default function Appointments() {
   const { appointments, trades, companies, save, store } = useApp();
   const [opened, setOpened] = useState<Partial<Appointment> | null>(null);
+
+  // The quick action in the header links here with ?neu=1: open the empty
+  // form and drop the parameter, so going back does not open it again.
+  const [params, setParams] = useSearchParams();
+  useEffect(() => {
+    if (!params.has('neu')) return;
+    setOpened({});
+    setParams({}, { replace: true });
+  }, [params, setParams]);
   const companyName = (id?: string | null) => companies.find((f) => f.id === id)?.name;
 
   const fields: Field[] = [

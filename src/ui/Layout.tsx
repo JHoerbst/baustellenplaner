@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Camera, CalendarDays, CalendarRange, DraftingCompass, Euro, HardHat, House, ListChecks, NotebookPen, Plus, Settings } from 'lucide-react';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Camera, CalendarDays, CalendarPlus, CalendarRange, DraftingCompass, Euro, HardHat, House, ListChecks, NotebookPen, Plus, Settings } from 'lucide-react';
 import { useApp } from '../lib/app';
 
 const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPaths?: string[] }[] = [
@@ -29,6 +29,10 @@ export function Layout() {
         <NavLink to="/notizen" className="icon-btn icon-btn--accent" aria-label="Notiz schreiben">
           <NotebookPen size={20} />
         </NavLink>
+        {/* Opens the appointments page with the empty form already up. */}
+        <Link to="/termine?neu=1" className="icon-btn icon-btn--accent" aria-label="Neuer Termin">
+          <CalendarPlus size={20} />
+        </Link>
         {/* Seven sections fill the bar; companies are needed less often. */}
         <NavLink to="/firmen" className="icon-btn" aria-label="Firmen">
           <HardHat size={20} />

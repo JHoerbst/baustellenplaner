@@ -1055,6 +1055,12 @@ input[type='file'] {
   background: var(--ruler);
 }
 
+/* The two quick actions sit together, apart from the plain header links. */
+.icon-btn--accent + .icon-btn--accent {
+  margin-left: 4px;
+  margin-right: 6px;
+}
+
 .note-new {
   display: flex;
   flex-direction: column;
