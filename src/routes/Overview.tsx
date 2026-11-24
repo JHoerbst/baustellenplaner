@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useApp } from '../lib/app';
+import { orderStatus } from '../lib/orders';
 import { photoReminders } from '../lib/reminders';
 import { formatDate, euro, today, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
 
@@ -57,7 +58,10 @@ export default function Overview() {
   });
 
   const awarded = quotes.filter((a) => a.status === 'awarded');
-  const awardedTotal = awarded.reduce((s, a) => s + (a.amount ?? 0), 0);
+  // Order totals include change orders.
+  const orders = awarded.map((a) => orderStatus(a, invoices));
+  const awardedTotal = orders.reduce((s, o) => s + o.total, 0);
+  const invoicedTotal = orders.reduce((s, o) => s + o.invoiced, 0);
   const awardedCount = new Set(awarded.map((a) => a.tradeId)).size;
 
   return (
@@ -113,7 +117,7 @@ export default function Overview() {
           <Link to="/angebote">Angebote</Link>
         </h2>
         <p className="figure">
-          <strong>{euro(awardedTotal)}</strong> beauftragt, {awardedCount} von {trades.filter((g) => !g.selfPerformed).length} Gewerken vergeben
+          <strong>{euro(awardedTotal)}</strong> beauftragt, {invoicedTotal > 0 && `davon ${euro(invoicedTotal)} verrechnet, `}{awardedCount} von {trades.filter((g) => !g.selfPerformed).length} Gewerken vergeben
         </p>
         {attention.length > 0 && (
           <ul className="list">

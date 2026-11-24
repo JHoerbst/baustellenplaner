@@ -54,10 +54,15 @@ export function toInputValue(iso: string): string {
   return `${isoDay(d)}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
 }
 
-/** "12.500,50", "12500.5" or "12 500 €" -> number. */
+/**
+ * "12.500,50", "12.500", "12500.5" or "12 500 €" -> number. German notation:
+ * a comma is the decimal mark, and dots in groups of three are thousands
+ * separators, so "1.500" is fifteen hundred, not one and a half.
+ */
 export function parseNumber(text: string): number | null {
   let s = text.replace(/[\s€]/g, '');
   if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+  else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
   const n = parseFloat(s);
   return Number.isFinite(n) ? n : null;
 }

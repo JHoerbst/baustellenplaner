@@ -1251,3 +1251,8 @@ input[type='file'] {
     font-size: 0.9rem;
   }
 }
+
+/* Change orders have no radio button in front. */
+.option--extra {
+  grid-template-columns: minmax(0, 1fr) 92px 42px;
+}

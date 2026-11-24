@@ -1,20 +1,56 @@
 import { useState } from 'react';
-import { Paperclip } from 'lucide-react';
+import { Paperclip, Trash2 } from 'lucide-react';
 import { useApp } from '../lib/app';
-import { formatDate, euro, today, daysUntil } from '../lib/format';
-import { STATUS, type Quote, type QuoteStatus, type Attachment } from '../lib/types';
+import { formatDate, euro, parseNumber, today, daysUntil } from '../lib/format';
+import { orderStatus } from '../lib/orders';
+import { STATUS, type Quote, type QuoteExtra, type QuoteStatus, type Attachment } from '../lib/types';
 import { Attachments } from '../ui/Attachments';
 import { EntityForm, type Field } from '../ui/EntityForm';
 import { CostsSwitch, Empty, PageTitle } from '../ui/Layout';
 
+/** One row of the change-order editor; the amount stays text while it is being typed. */
+type ExtraDraft = { title: string; amount: string; date: string };
+
+const toDraft = (e: QuoteExtra): ExtraDraft => ({
+  title: e.title,
+  amount: e.amount == null ? '' : String(e.amount).replace('.', ','),
+  date: e.date ?? '',
+});
+
+/** Change orders: work agreed after the quote was awarded, with its price. */
+function ExtrasEditor({ extras, onChange }: { extras: ExtraDraft[]; onChange: (extras: ExtraDraft[]) => void }) {
+  const set = (i: number, patch: Partial<ExtraDraft>) => onChange(extras.map((e, j) => (j === i ? { ...e, ...patch } : e)));
+  return (
+    <fieldset className="options">
+      <legend>Nachträge</legend>
+      {extras.map((e, i) => (
+        <div key={i} className="option option--extra">
+          <input value={e.title} onChange={(ev) => set(i, { title: ev.target.value })} placeholder="z.B. zusätzlicher Durchbruch" aria-label="Was kam dazu?" />
+          <input value={e.amount} onChange={(ev) => set(i, { amount: ev.target.value })} inputMode="decimal" placeholder="€" aria-label="Betrag" />
+          <button type="button" className="icon-btn" onClick={() => onChange(extras.filter((_, j) => j !== i))} aria-label={`${e.title || `Nachtrag ${i + 1}`} entfernen`}>
+            <Trash2 size={16} />
+          </button>
+        </div>
+      ))}
+      <div className="btn-row">
+        <button type="button" className="btn" onClick={() => onChange([...extras, { title: '', amount: '', date: today() }])}>
+          Nachtrag hinzufügen
+        </button>
+      </div>
+    </fieldset>
+  );
+}
+
 export default function Quotes() {
-  const { quotes, trades, companies, project, save, store } = useApp();
+  const { quotes, invoices, trades, companies, project, save, store } = useApp();
   const [opened, setOpenedRaw] = useState<Partial<Quote> | null>(null);
   /** Files of a quote that has not been saved yet. */
   const [draft, setDraft] = useState<Attachment[]>([]);
+  const [extras, setExtras] = useState<ExtraDraft[]>([]);
 
   function setOpened(a: Partial<Quote> | null) {
     setDraft([]);
+    setExtras((a?.extras ?? []).map(toDraft));
     setOpenedRaw(a);
   }
   const companyName = (id?: string | null) => companies.find((f) => f.id === id)?.name;
@@ -40,7 +76,7 @@ export default function Quotes() {
       ...g,
       quotes: quotes
         .filter((a) => (trades.some((x) => x.id === a.tradeId) ? a.tradeId : null) === g.id)
-        // Abgelehnte ans Ende, sonst guenstigstes zuerst.
+        // Rejected ones last, otherwise cheapest first.
         .sort(
           (a, b) =>
             +(a.status === 'rejected') - +(b.status === 'rejected') ||
@@ -53,6 +89,20 @@ export default function Quotes() {
   const withoutQuote = trades.filter((g) => !g.selfPerformed && !quotes.some((a) => a.tradeId === g.id));
   // The sheet shows the live row so new attachments appear immediately.
   const liveRow = opened?.id ? quotes.find((a) => a.id === opened.id) : undefined;
+  const openedOrder = liveRow?.status === 'awarded' ? orderStatus(liveRow, invoices) : null;
+
+  /** "verrechnet € 25.000, bezahlt € 10.000, noch offen € 61.000" for an awarded quote. */
+  const orderLine = (a: Quote) => {
+    const o = orderStatus(a, invoices);
+    return [
+      o.extras !== 0 && `Auftrag ${euro(o.total)} mit Nachträgen`,
+      `verrechnet ${euro(o.invoiced)}`,
+      `bezahlt ${euro(o.paid)}`,
+      o.remaining < 0 ? `${euro(-o.remaining)} über dem Auftrag` : `noch offen ${euro(o.remaining)}`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+  };
 
   return (
     <>
@@ -86,6 +136,7 @@ export default function Quotes() {
                         )}
                         {!!a.attachments?.length && <Paperclip size={13} aria-label="mit Datei" className="clip" />}
                       </span>
+                      {a.status === 'awarded' && <span className={orderStatus(a, invoices).remaining < 0 ? 'is-urgent' : undefined}>{orderLine(a)}</span>}
                       {/* Bar only when there is something to compare. */}
                       {contenders.length > 1 && a.amount != null && a.status !== 'rejected' && (
                         <span className="bar" style={{ width: `${(a.amount / max) * 100}%` }} />
@@ -115,9 +166,27 @@ export default function Quotes() {
           fields={fields}
           value={opened}
           onClose={() => setOpened(null)}
-          onSave={(d) => save('Quote', opened.id, opened.id ? d : { ...d, attachments: draft })}
+          onSave={(d) =>
+            save('Quote', opened.id, {
+              ...d,
+              // Rows without a title are leftovers from "add" and are dropped.
+              extras: extras
+                .filter((e) => e.title.trim())
+                .map((e) => ({ title: e.title.trim(), amount: parseNumber(e.amount), date: e.date || null })),
+              ...(opened.id ? {} : { attachments: draft }),
+            })
+          }
           onDelete={opened.id ? () => store.remove('Quote', opened.id!) : undefined}
         >
+          {/* Change orders and the payment status only make sense once the quote is awarded. */}
+          {openedOrder && (
+            <>
+              <p className="figure">
+                <strong>{euro(openedOrder.total)}</strong> Auftrag, verrechnet {euro(openedOrder.invoiced)}, bezahlt {euro(openedOrder.paid)}
+              </p>
+              <ExtrasEditor extras={extras} onChange={setExtras} />
+            </>
+          )}
           <Attachments
             group={project.group}
             attachments={liveRow ? (liveRow.attachments ?? []) : draft}

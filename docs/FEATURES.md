@@ -53,10 +53,10 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   etwas wird zu spät bestellt oder passt nicht mehr (Badewanne nach dem
   Estrich). Braucht: was, wo bestellt, Liefertermin, bis wann es auf der
   Baustelle sein muss; sichtbar im Zeitplan.
-- [ ] **Zahlungsstand je Auftrag.** Zu einem beauftragten Angebot zeigen:
+- [x] **Zahlungsstand je Auftrag.** Zu einem beauftragten Angebot zeigen:
   beauftragt, schon verrechnet, bezahlt, Rest. Die Verknüpfung
   Rechnung-Angebot gibt es schon, die Summe daraus noch nicht.
-- [ ] **Nachträge.** Zusatzaufträge zu einem beauftragten Angebot mit
+- [x] **Nachträge.** Zusatzaufträge zu einem beauftragten Angebot mit
   Betrag und Datum, damit die Auftragssumme stimmt.
 - [ ] **Gesamtbudget mit Puffer.** Ein Betrag für das ganze Projekt, dazu
   Ausgaben und noch offene Aufträge, mit Warnung. Budget je Gewerk bleibt

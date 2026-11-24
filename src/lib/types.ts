@@ -29,6 +29,8 @@ export const STATUS: Record<QuoteStatus, string> = {
   rejected: 'Abgelehnt',
 };
 
+export type QuoteExtra = { title: string; amount?: number | null; date?: string | null };
+
 export type Quote = InProject & {
   title: string;
   tradeId?: string | null;
@@ -39,6 +41,7 @@ export type Quote = InProject & {
   receivedOn?: string | null;
   validUntil?: string | null;
   note?: string | null;
+  extras?: QuoteExtra[] | null;
   attachments?: Attachment[] | null;
 };
 

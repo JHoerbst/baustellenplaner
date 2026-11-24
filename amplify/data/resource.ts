@@ -24,6 +24,13 @@ const schema = a.schema({
     size: a.integer(),
   }),
 
+  // Change order: work agreed after a quote was awarded.
+  QuoteExtra: a.customType({
+    title: a.string().required(),
+    amount: a.float(),
+    date: a.date(),
+  }),
+
   DecisionOption: a.customType({
     name: a.string().required(),
     price: a.float(),
@@ -78,6 +85,7 @@ const schema = a.schema({
       receivedOn: a.date(),
       validUntil: a.date(),
       note: a.string(),
+      extras: a.ref('QuoteExtra').array(),
       attachments: a.ref('Attachment').array(),
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
