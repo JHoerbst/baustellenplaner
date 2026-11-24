@@ -9,7 +9,11 @@ const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, me, assignments } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, me, assignments } = useApp();
+  // Decisions that are due within two weeks or already overdue.
+  const toDecide = decisions
+    .filter((d) => !d.chosen && d.deadline && daysUntil(d.deadline) <= 14)
+    .sort((a, b) => a.deadline!.localeCompare(b.deadline!));
   const openDefects = defects.filter((d) => d.status !== 'fixed');
   const toPay = invoices.filter((r) => !r.paid);
   const companyName = (id?: string | null) => companies.find((f) => f.id === id)?.name;
@@ -27,7 +31,8 @@ export default function Overview() {
         tasks.filter((a) => !a.done && a.dueDate === day).length +
         quotes.filter((a) => a.validUntil === day && (a.status === 'received' || a.status === 'negotiating')).length +
         invoices.filter((r) => !r.paid && r.dueDate === day).length +
-        defects.filter((d) => d.status !== 'fixed' && d.deadline === day).length,
+        defects.filter((d) => d.status !== 'fixed' && d.deadline === day).length +
+        decisions.filter((d) => !d.chosen && d.deadline === day).length,
     };
   });
 
@@ -123,6 +128,24 @@ export default function Overview() {
           </ul>
         )}
       </section>
+
+      {toDecide.length > 0 && (
+        <section className="block">
+          <h2>
+            <Link to="/entscheidungen">Zu entscheiden</Link>
+          </h2>
+          <ul className="list">
+            {toDecide.map((d) => (
+              <li key={d.id} className="row">
+                <div className="row-main">
+                  <strong>{d.title}</strong>
+                  <span className={daysUntil(d.deadline!) <= 3 ? 'is-urgent' : undefined}>bis {relativeDay(d.deadline!)}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {openDefects.length > 0 && (
         <section className="block">

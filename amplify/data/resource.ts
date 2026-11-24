@@ -24,6 +24,12 @@ const schema = a.schema({
     size: a.integer(),
   }),
 
+  DecisionOption: a.customType({
+    name: a.string().required(),
+    price: a.float(),
+    note: a.string(),
+  }),
+
   QuoteStatus: a.enum(['requested', 'received', 'negotiating', 'awarded', 'rejected']),
 
   Project: a
@@ -159,6 +165,23 @@ const schema = a.schema({
       companyId: a.id(),
       tradeId: a.id(),
       author: a.string(),
+    })
+    .authorization((allow) => [allow.groupDefinedIn('group')]),
+
+  // Open questions (tiles, floors, sockets) with their options. "chosen" is
+  // the name of the picked option; empty means still undecided.
+  Decision: a
+    .model({
+      ...inProject,
+      title: a.string().required(),
+      description: a.string(),
+      roomId: a.id(),
+      tradeId: a.id(),
+      deadline: a.date(),
+      options: a.ref('DecisionOption').array(),
+      chosen: a.string(),
+      decidedOn: a.date(),
+      attachments: a.ref('Attachment').array(),
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 

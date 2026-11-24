@@ -19,6 +19,8 @@ und am Rechner.
 - **Aufgaben**: mit Zuständigkeit und Frist, Filter "Meine"
 - **Notizen**: von überall ein Tipp zum leeren Textfeld, etwa während eines
   Anrufs; Firma und Gewerk lassen sich später zuordnen
+- **Entscheidungen**: offene Fragen wie Fliesen oder Steckdosen mit
+  Möglichkeiten, Preis und dem Datum, bis wann es feststehen muss
 - **Mängel**: mit Foto, Raum, zuständiger Firma und Frist bis zur Behebung,
   gruppiert nach Firma
 - **Pläne**: Grundrisse und Schnitte als PDF oder Bild, in der App zum

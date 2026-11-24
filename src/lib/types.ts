@@ -122,6 +122,20 @@ export type Photo = InProject & {
   tradeId?: string | null;
 };
 
+export type DecisionOption = { name: string; price?: number | null; note?: string | null };
+
+export type Decision = InProject & {
+  title: string;
+  description?: string | null;
+  roomId?: string | null;
+  tradeId?: string | null;
+  deadline?: string | null;
+  options?: DecisionOption[] | null;
+  chosen?: string | null;
+  decidedOn?: string | null;
+  attachments?: Attachment[] | null;
+};
+
 export type Room = InProject & { name: string; floor?: string | null; area?: number | null };
 
 export const DEFECT_STATUS = {
@@ -159,6 +173,7 @@ export type Tables = {
   Photo: Photo;
   Defect: Defect;
   Room: Room;
+  Decision: Decision;
 };
 export type Kind = keyof Tables;
 export type New<A extends Kind> = Omit<Tables[A], 'id' | 'createdAt' | 'updatedAt'>;

@@ -3,14 +3,14 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Camera, CalendarDays, CalendarRange, DraftingCompass, Euro, HardHat, House, ListChecks, NotebookPen, Plus, Settings } from 'lucide-react';
 import { useApp } from '../lib/app';
 
-const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPath?: string }[] = [
+const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPaths?: string[] }[] = [
   { path: '/', label: 'Übersicht', Icon: House },
   { path: '/zeitplan', label: 'Zeitplan', Icon: CalendarRange },
   // Quotes and invoices share one slot, see CostsSwitch.
-  { path: '/angebote', label: 'Kosten', Icon: Euro, alsoPath: '/rechnungen' },
+  { path: '/angebote', label: 'Kosten', Icon: Euro, alsoPaths: ['/rechnungen'] },
   { path: '/termine', label: 'Termine', Icon: CalendarDays },
-  // Tasks and defects share one slot, see TasksSwitch.
-  { path: '/aufgaben', label: 'Aufgaben', Icon: ListChecks, alsoPath: '/maengel' },
+  // Tasks, defects and decisions share one slot, see TasksSwitch.
+  { path: '/aufgaben', label: 'Aufgaben', Icon: ListChecks, alsoPaths: ['/maengel', '/entscheidungen'] },
   { path: '/plaene', label: 'Pläne', Icon: DraftingCompass },
   { path: '/fotos', label: 'Fotos', Icon: Camera },
 ];
@@ -47,8 +47,8 @@ export function Layout() {
         <Outlet />
       </main>
       <nav className="navbar" aria-label="Bereiche">
-        {NAV_ITEMS.map(({ path, label, Icon, alsoPath }) => (
-          <NavLink key={path} to={path} end={path === '/'} className={({ isActive }) => (isActive || pathname === alsoPath ? 'active' : '')}>
+        {NAV_ITEMS.map(({ path, label, Icon, alsoPaths }) => (
+          <NavLink key={path} to={path} end={path === '/'} className={({ isActive }) => (isActive || alsoPaths?.includes(pathname) ? 'active' : '')}>
             <Icon size={22} aria-hidden />
             <span>{label}</span>
           </NavLink>
@@ -83,12 +83,13 @@ export function CostsSwitch() {
   );
 }
 
-/** Switch between the two pages under "Aufgaben". */
+/** Switch between the three pages under "Aufgaben". */
 export function TasksSwitch() {
   return (
-    <nav className="toggle" aria-label="Aufgaben und Mängel">
+    <nav className="toggle" aria-label="Aufgaben, Mängel und Entscheidungen">
       <NavLink to="/aufgaben">Aufgaben</NavLink>
       <NavLink to="/maengel">Mängel</NavLink>
+      <NavLink to="/entscheidungen">Entscheidungen</NavLink>
     </nav>
   );
 }

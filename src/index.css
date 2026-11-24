@@ -1219,3 +1219,35 @@ input[type='file'] {
   margin-top: 0;
   justify-content: flex-end;
 }
+
+/* ---- Decisions --------------------------------------------------------- */
+
+.options {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.options legend {
+  padding: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Radio, name, price, remove. */
+.option {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 92px 42px;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* Three entries in the toggle: let it use the full width on phones. */
+@media (max-width: 480px) {
+  .toggle a {
+    padding: 0 10px;
+    font-size: 0.9rem;
+  }
+}

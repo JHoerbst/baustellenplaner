@@ -45,7 +45,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
 - [x] **Mängelliste.** Mangel mit Foto, Firma, Frist und Stand bis zur
   Behebung. Laut Ratgebern werden Mängel bei der Abnahme schriftlich
   festgehalten, und die Schlussrechnung folgt erst danach.
-- [ ] **Entscheidungen.** Offene Fragen (Fliesen, Böden, Steckdosen) mit
+- [x] **Entscheidungen.** Offene Fragen (Fliesen, Böden, Steckdosen) mit
   Optionen, Preis und dem Datum, bis wann der Handwerker es wissen muss.
   Mehrere Quellen nennen die vielen kleinen Entscheidungen als das, was
   Zeit und Budget sprengt.
