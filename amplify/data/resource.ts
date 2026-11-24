@@ -176,6 +176,27 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 
+  // Things to order that have a delivery time. "status" is one of the keys of
+  // MATERIAL_ORDER_STATUS in src/lib/types.ts.
+  MaterialOrder: a
+    .model({
+      ...inProject,
+      title: a.string().required(),
+      supplier: a.string(),
+      amount: a.float(),
+      status: a.string().required(),
+      // Latest date to place the order so it arrives in time.
+      orderBy: a.date(),
+      orderedOn: a.date(),
+      deliveryDate: a.date(),
+      // From when it has to be on site.
+      neededBy: a.date(),
+      tradeId: a.id(),
+      roomId: a.id(),
+      note: a.string(),
+    })
+    .authorization((allow) => [allow.groupDefinedIn('group')]),
+
   // Open questions (tiles, floors, sockets) with their options. "chosen" is
   // the name of the picked option; empty means still undecided.
   Decision: a

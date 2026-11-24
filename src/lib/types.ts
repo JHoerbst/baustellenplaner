@@ -125,6 +125,27 @@ export type Photo = InProject & {
   tradeId?: string | null;
 };
 
+export const MATERIAL_ORDER_STATUS = {
+  planned: 'Noch zu bestellen',
+  ordered: 'Bestellt',
+  delivered: 'Geliefert',
+};
+export type MaterialOrderStatus = keyof typeof MATERIAL_ORDER_STATUS;
+
+export type MaterialOrder = InProject & {
+  title: string;
+  supplier?: string | null;
+  amount?: number | null;
+  status: string;
+  orderBy?: string | null;
+  orderedOn?: string | null;
+  deliveryDate?: string | null;
+  neededBy?: string | null;
+  tradeId?: string | null;
+  roomId?: string | null;
+  note?: string | null;
+};
+
 export type DecisionOption = { name: string; price?: number | null; note?: string | null };
 
 export type Decision = InProject & {
@@ -177,6 +198,7 @@ export type Tables = {
   Defect: Defect;
   Room: Room;
   Decision: Decision;
+  MaterialOrder: MaterialOrder;
 };
 export type Kind = keyof Tables;
 export type New<A extends Kind> = Omit<Tables[A], 'id' | 'createdAt' | 'updatedAt'>;

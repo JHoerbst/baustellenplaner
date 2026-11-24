@@ -49,7 +49,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   Optionen, Preis und dem Datum, bis wann der Handwerker es wissen muss.
   Mehrere Quellen nennen die vielen kleinen Entscheidungen als das, was
   Zeit und Budget sprengt.
-- [ ] **Bestellungen mit Lieferzeit.** Typischer Fehler aus den Berichten:
+- [x] **Bestellungen mit Lieferzeit.** Typischer Fehler aus den Berichten:
   etwas wird zu spät bestellt oder passt nicht mehr (Badewanne nach dem
   Estrich). Braucht: was, wo bestellt, Liefertermin, bis wann es auf der
   Baustelle sein muss; sichtbar im Zeitplan.

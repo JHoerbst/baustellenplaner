@@ -1256,3 +1256,27 @@ input[type='file'] {
 .option--extra {
   grid-template-columns: minmax(0, 1fr) 92px 42px;
 }
+
+/* ---- Deliveries in the schedule ---------------------------------------- */
+
+a.sched-name {
+  text-decoration: none;
+}
+
+/* Filled square = promised delivery, ring = needed on site from. */
+.mark--delivery {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+.mark--needed {
+  width: 14px;
+  height: 14px;
+  box-shadow: inset 0 0 0 2.5px var(--urgent);
+}
+
+.sched-cell .mark + .mark {
+  margin-left: -6px;
+}

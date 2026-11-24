@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/app';
 import { formatDate, today, mondayOf, addDays, longDay, daysBetween, weekdayOf } from '../lib/format';
@@ -20,7 +21,11 @@ const HELPER_FIELDS: Field[] = [
 ];
 
 export default function Schedule() {
-  const { assignments, helpers, trades, companies, project, save, store } = useApp();
+  const { assignments, helpers, materialOrders, trades, companies, project, save, store } = useApp();
+  // Deliveries still to come, in the order they are expected.
+  const deliveries = materialOrders
+    .filter((o) => o.status !== 'delivered' && (o.deliveryDate || o.neededBy))
+    .sort((a, b) => (a.deliveryDate ?? a.neededBy ?? '').localeCompare(b.deliveryDate ?? b.neededBy ?? ''));
   const [start, setStart] = useState(() => mondayOf(today()));
   const [selected, setSelected] = useState(today());
   const [assignment, setAssignment] = useState<Partial<Assignment> | null>(null);
@@ -159,6 +164,26 @@ export default function Schedule() {
             </div>
           );
         })}
+
+        {deliveries.length > 0 && (
+          <div className="sched-row sched-section">
+            <div className="sched-name">Lieferungen</div>
+          </div>
+        )}
+        {deliveries.map((o) => (
+          <div key={o.id} className="sched-row">
+            <Link to="/bestellungen" className="sched-name">
+              <strong>{o.title}</strong>
+              <span>{o.deliveryDate ? `kommt ${formatDate(o.deliveryDate)}` : `gebraucht ab ${formatDate(o.neededBy!)}`}</span>
+            </Link>
+            {days.map((day, i) => (
+              <div key={day} className={cellClass(day)} style={{ gridColumn: i + 2 }}>
+                {day === o.deliveryDate && <i className="mark mark--delivery" title="Zugesagter Liefertermin" />}
+                {day === o.neededBy && <i className="mark mark--needed" title="Auf der Baustelle gebraucht ab" />}
+              </div>
+            ))}
+          </div>
+        ))}
 
         <div className="sched-row sched-section">
           <div className="sched-name">Helfer</div>

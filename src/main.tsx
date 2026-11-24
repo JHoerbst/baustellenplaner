@@ -21,6 +21,7 @@ import Notes from './routes/Notes';
 import Photos from './routes/Photos';
 import Defects from './routes/Defects';
 import Decisions from './routes/Decisions';
+import MaterialOrders from './routes/MaterialOrders';
 import Invoices from './routes/Invoices';
 import Companies from './routes/Companies';
 import ProjectPage from './routes/Project';
@@ -37,6 +38,7 @@ const router = createHashRouter([
       { path: '/aufgaben', element: <Tasks /> },
       { path: '/plaene', element: <Plans /> },
       { path: '/rechnungen', element: <Invoices /> },
+      { path: '/bestellungen', element: <MaterialOrders /> },
       { path: '/entscheidungen', element: <Decisions /> },
       { path: '/maengel', element: <Defects /> },
       { path: '/fotos', element: <Photos /> },

@@ -15,6 +15,9 @@ und am Rechner.
 - **Rechnungen**: Einkäufe (Baustoffe, Werkzeug) und Handwerker-Rechnungen
   mit Beleg-Foto, Art, Gewerk und bezahlt/offen; Summen nach Art und Gewerk,
   Suche zum Wiederfinden für die Garantie
+- **Bestellungen**: was Lieferzeit hat, mit spätestem Bestelltermin,
+  zugesagter Lieferung und dem Tag, ab dem es gebraucht wird; im Zeitplan
+  sichtbar, mit Warnung, wenn es zu spät käme
 - **Termine**: nach Tagen gruppiert, mit Firma und Ort
 - **Aufgaben**: mit Zuständigkeit und Frist, Filter "Meine"
 - **Notizen**: von überall ein Tipp zum leeren Textfeld, etwa während eines

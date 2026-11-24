@@ -6,8 +6,8 @@ import { useApp } from '../lib/app';
 const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPaths?: string[] }[] = [
   { path: '/', label: 'Übersicht', Icon: House },
   { path: '/zeitplan', label: 'Zeitplan', Icon: CalendarRange },
-  // Quotes and invoices share one slot, see CostsSwitch.
-  { path: '/angebote', label: 'Kosten', Icon: Euro, alsoPaths: ['/rechnungen'] },
+  // Quotes, invoices and material orders share one slot, see CostsSwitch.
+  { path: '/angebote', label: 'Kosten', Icon: Euro, alsoPaths: ['/rechnungen', '/bestellungen'] },
   { path: '/termine', label: 'Termine', Icon: CalendarDays },
   // Tasks, defects and decisions share one slot, see TasksSwitch.
   { path: '/aufgaben', label: 'Aufgaben', Icon: ListChecks, alsoPaths: ['/maengel', '/entscheidungen'] },
@@ -79,6 +79,7 @@ export function CostsSwitch() {
     <nav className="toggle" aria-label="Kosten">
       <NavLink to="/angebote">Angebote</NavLink>
       <NavLink to="/rechnungen">Rechnungen</NavLink>
+      <NavLink to="/bestellungen">Bestellungen</NavLink>
     </nav>
   );
 }

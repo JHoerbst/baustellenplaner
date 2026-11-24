@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useApp } from '../lib/app';
+import { orderWarning } from '../lib/materialOrders';
 import { orderStatus } from '../lib/orders';
 import { photoReminders } from '../lib/reminders';
 import { formatDate, euro, today, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
@@ -10,7 +11,11 @@ const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, me, assignments } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, me, assignments } = useApp();
+  const orderWarnings = materialOrders.flatMap((o) => {
+    const warning = orderWarning(o);
+    return warning ? [{ id: o.id, title: o.title, ...warning }] : [];
+  });
   // Decisions that are due within two weeks or already overdue.
   const toDecide = decisions
     .filter((d) => !d.chosen && d.deadline && daysUntil(d.deadline) <= 14)
@@ -33,7 +38,8 @@ export default function Overview() {
         quotes.filter((a) => a.validUntil === day && (a.status === 'received' || a.status === 'negotiating')).length +
         invoices.filter((r) => !r.paid && r.dueDate === day).length +
         defects.filter((d) => d.status !== 'fixed' && d.deadline === day).length +
-        decisions.filter((d) => !d.chosen && d.deadline === day).length,
+        decisions.filter((d) => !d.chosen && d.deadline === day).length +
+        materialOrders.filter((o) => (o.status === 'planned' && o.orderBy === day) || (o.status === 'ordered' && o.deliveryDate === day)).length,
     };
   });
 
@@ -132,6 +138,24 @@ export default function Overview() {
           </ul>
         )}
       </section>
+
+      {orderWarnings.length > 0 && (
+        <section className="block">
+          <h2>
+            <Link to="/bestellungen">Bestellungen</Link>
+          </h2>
+          <ul className="list">
+            {orderWarnings.map((o) => (
+              <li key={o.id} className="row">
+                <div className="row-main">
+                  <strong>{o.title}</strong>
+                  <span className={o.urgent ? 'is-urgent' : undefined}>{o.text}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {toDecide.length > 0 && (
         <section className="block">
