@@ -7,15 +7,15 @@ import {
   ListUsersInGroupCommand,
   UsernameExistsException,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { identityOf, requireMember, type ResolverEvent } from '../shared/group';
+import { argsOf, fieldNameOf, identityOf, requireMember, type ResolverEvent } from '../shared/group';
 
 const cognito = new CognitoIdentityProviderClient({});
 const UserPoolId = process.env.USER_POOL_ID!;
 
 /** One handler for several schema fields, dispatched by fieldName. */
 export const handler = async (event: ResolverEvent) => {
-  const args = event.arguments;
-  switch (event.info.fieldName) {
+  const args = argsOf(event);
+  switch (fieldNameOf(event)) {
     case 'createProjectGroup': {
       const GroupName = `p-${randomUUID()}`;
       await cognito.send(new CreateGroupCommand({ UserPoolId, GroupName }));
@@ -60,6 +60,6 @@ export const handler = async (event: ResolverEvent) => {
     }
 
     default:
-      throw new Error(`Unknown field ${event.info.fieldName}`);
+      throw new Error(`Unknown field ${fieldNameOf(event)}`);
   }
 };
