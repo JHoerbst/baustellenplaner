@@ -5,6 +5,7 @@ import { toInputValue, parseNumber } from '../lib/format';
 /** Sheet that slides up from the bottom (centred on desktop), built on <dialog>. */
 export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const pressedBackdrop = useRef(false);
   useEffect(() => {
     const dialog = ref.current!;
     dialog.showModal();
@@ -21,7 +22,16 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
         e.preventDefault();
         onClose();
       }}
-      onClick={(e) => e.target === ref.current && onClose()}
+      // A click on the backdrop closes the sheet, but only if the press also
+      // started there. Selecting text and letting go outside the sheet ends
+      // as a click on the dialog too and must not close it.
+      onPointerDown={(e) => {
+        pressedBackdrop.current = e.target === ref.current;
+      }}
+      onClick={(e) => {
+        if (e.target === ref.current && pressedBackdrop.current) onClose();
+        pressedBackdrop.current = false;
+      }}
     >
       <div className="sheet-inner">
         <header className="sheet-header">
