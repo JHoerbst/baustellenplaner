@@ -20,7 +20,7 @@ const TASKS_SHOWN = 8;
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, me, assignments, store } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, me, memberName, assignments, store } = useApp();
   const orderWarnings = materialOrders.flatMap((o) => {
     const warning = orderWarning(o);
     return warning ? [{ id: o.id, title: o.title, ...warning }] : [];
@@ -281,7 +281,7 @@ export default function Overview() {
                       <span className={daysUntil(a.dueDate) < 0 ? 'is-urgent' : undefined}>fällig {relativeDay(a.dueDate)}</span>
                     )}
                     {a.dueDate && a.assignee && ', '}
-                    {a.assignee}
+                    {memberName(a.assignee)}
                   </span>
                 </div>
               </li>

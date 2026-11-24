@@ -12,13 +12,19 @@ export type Project = Base & {
   householdSize?: number | null;
   budget?: number | null;
   reserve?: number | null;
+  /** Nicknames shown instead of email addresses. */
+  memberNames?: { email: string; name: string }[] | null;
 };
 
 export type Trade = InProject & { name: string; sortOrder?: number | null; selfPerformed?: boolean | null };
 
+export type Contact = { name: string; role?: string | null; phone?: string | null; email?: string | null };
+
 export type Company = InProject & {
   name: string;
+  /** Superseded by contacts; only read for entries saved before. */
   contactPerson?: string | null;
+  contacts?: Contact[] | null;
   phone?: string | null;
   email?: string | null;
   address?: string | null;

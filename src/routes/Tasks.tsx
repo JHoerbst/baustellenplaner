@@ -7,7 +7,7 @@ import { EntityForm, type Field } from '../ui/EntityForm';
 import { Empty, PageTitle, TasksSwitch } from '../ui/Layout';
 
 export default function Tasks() {
-  const { tasks, trades, rooms, members, me, save, store } = useApp();
+  const { tasks, trades, rooms, members, memberName, me, save, store } = useApp();
   const roomName = (id?: string | null) => {
     const room = rooms.find((r) => r.id === id);
     return room && roomLabel(room);
@@ -18,7 +18,7 @@ export default function Tasks() {
 
   const fields: Field[] = [
     { name: 'title', label: 'Was ist zu tun?', required: true },
-    { name: 'assignee', label: 'Wer kümmert sich?', type: 'select', half: true, options: members.map((m) => ({ value: m, label: m })) },
+    { name: 'assignee', label: 'Wer kümmert sich?', type: 'select', half: true, options: members.map((m) => ({ value: m, label: memberName(m) })) },
     { name: 'dueDate', label: 'Fällig am', type: 'date', half: true },
     { name: 'tradeId', label: 'Gewerk', type: 'select', half: true, options: trades.map((g) => ({ value: g.id, label: g.name })) },
     { name: 'roomId', label: 'Raum', type: 'select', half: true, options: rooms.map((r) => ({ value: r.id, label: roomLabel(r) })) },
@@ -49,7 +49,7 @@ export default function Tasks() {
               {formatDate(a.dueDate)} ({relativeDay(a.dueDate)}){' '}
             </span>
           )}
-          {[a.assignee, tradeName(a.tradeId), roomName(a.roomId)].filter(Boolean).join(', ')}
+          {[memberName(a.assignee), tradeName(a.tradeId), roomName(a.roomId)].filter(Boolean).join(', ')}
         </span>
       </button>
     </li>

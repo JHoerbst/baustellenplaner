@@ -1470,3 +1470,26 @@ a.sched-name {
 .week-item:focus-visible {
   outline-offset: 2px;
 }
+
+/* ---- Contacts of a company --------------------------------------------- */
+
+/* A person sits under the company, indented and a little lighter. */
+.row.contact {
+  min-height: 46px;
+  padding-left: 28px;
+  border-top: 1px solid #e8ecef;
+}
+
+/* Editing: name and role, then phone and mail, remove at the side. */
+.contact-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 42px;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.contact-edit .icon-btn {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+}

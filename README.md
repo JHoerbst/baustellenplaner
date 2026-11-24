@@ -33,11 +33,12 @@ und am Rechner.
   Hineinzoomen und Verschieben (Finger, Mausrad, Doppeltipp)
 - **Fotos**: nach Raum und Datum abgelegt, zum Hineinzoomen; die App erinnert
   vor Putz, Estrich und Trockenbau ans Fotografieren der Leitungen
-- **Firmen**: Kontakte mit Anrufen und E-Mail per Tipp
+- **Firmen**: mehrere Ansprechpersonen je Firma mit Funktion (z.B. Polier),
+  Anrufen und E-Mail per Tipp
 - **Räume**: einmal anlegen (mit Geschoss), dann Fotos, Mängel und Aufgaben
   zuordnen
 - **Projekt**: Gewerke einzeln zuschalten oder eigene anlegen, auch als
-  Eigenleistung, Mitglieder per E-Mail einladen,
+  Eigenleistung, Mitglieder per E-Mail einladen und ihnen Namen geben,
   mehrere Projekte
 
 Was noch offen ist, steht in [docs/FEATURES.md](docs/FEATURES.md).

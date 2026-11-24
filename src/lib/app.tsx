@@ -31,8 +31,11 @@ type App = {
   rooms: Room[];
   /** Newest first. */
   invoices: Invoice[];
+  /** Email addresses of the project's members; they identify a member in the data. */
   members: string[];
   loadMembers: () => void;
+  /** What to show for a member: the nickname if one is set, otherwise the part before the @. */
+  memberName: (email: string | null | undefined) => string;
   /** Creates a row in the current project or updates it, depending on whether id is set. */
   save: <A extends InProjectKind>(
     kind: A,
@@ -119,6 +122,10 @@ export function AppProvider({ store, me, children }: { store: Store; me: string;
       invoices: [...invoices].sort((a, b) => b.date.localeCompare(a.date)),
       members,
       loadMembers,
+      memberName(email) {
+        if (!email) return '';
+        return project?.memberNames?.find((m) => m.email === email)?.name ?? email.split('@')[0];
+      },
       async save(kind, id, payload) {
         if (!project) throw new Error('Kein Projekt gewählt.');
         if (id) await store.update(kind, id, payload as never);

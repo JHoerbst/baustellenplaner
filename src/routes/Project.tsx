@@ -31,7 +31,9 @@ const TRADE_FIELDS: Field[] = [
 ];
 
 export default function ProjectPage() {
-  const { project, projects, selectProject, trades, rooms, members, loadMembers, me, save, store } = useApp();
+  const { project, projects, selectProject, trades, rooms, members, memberName, loadMembers, me, save, store } = useApp();
+  /** Email of the member whose nickname is being edited. */
+  const [naming, setNaming] = useState<string | null>(null);
   const [editedRoom, setEditedRoom] = useState<Partial<Room> | null>(null);
   const [pastingRooms, setPastingRooms] = useState(false);
   const [editedTrade, setEditedTrade] = useState<Partial<Trade> | null>(null);
@@ -95,11 +97,13 @@ export default function ProjectPage() {
         <h2>Wer mitplant</h2>
         <ul className="list">
           {members.map((m) => (
-            <li key={m} className="row">
-              <div className="row-main">
-                <strong>{m}</strong>
-                {m === me && <span>das bist du</span>}
-              </div>
+            <li key={m}>
+              <button type="button" className="row row--button" onClick={() => setNaming(m)} aria-label={`Namen für ${m} ändern`}>
+                <div className="row-main">
+                  <strong>{memberName(m)}</strong>
+                  <span>{[m, m === me && 'das bist du'].filter(Boolean).join(', ')}</span>
+                </div>
+              </button>
             </li>
           ))}
         </ul>
@@ -185,7 +189,9 @@ export default function ProjectPage() {
 
       {store.cloud && (
         <section className="block">
-          <p className="hint">Angemeldet als {me}</p>
+          <p className="hint">
+            Angemeldet als {memberName(me)} ({me})
+          </p>
           <button type="button" className="btn" onClick={() => store.logout()}>
             Abmelden
           </button>
@@ -213,6 +219,20 @@ export default function ProjectPage() {
               await save('Room', undefined, { ...room, floor: (d.floor as string | null) ?? null });
             }
           }}
+        />
+      )}
+
+      {naming && (
+        <EntityForm
+          title="Name ändern"
+          fields={[{ name: 'name', label: `Wie soll ${naming} in der App heißen?`, required: true }]}
+          value={{ id: naming, name: memberName(naming) }}
+          onClose={() => setNaming(null)}
+          onSave={(d) =>
+            store.update('Project', project.id, {
+              memberNames: [...(project.memberNames ?? []).filter((m) => m.email !== naming), { email: naming, name: String(d.name) }],
+            })
+          }
         />
       )}
 

@@ -13,7 +13,7 @@ const SEARCH_FROM = 6;
  * once, everything else (company, trade) is optional and can follow later.
  */
 export default function Notes() {
-  const { notes, companies, trades, me, save, store } = useApp();
+  const { notes, companies, trades, me, memberName, save, store } = useApp();
   const [text, setText] = useState('');
   const [companyId, setCompanyId] = useState('');
   const [search, setSearch] = useState('');
@@ -102,7 +102,7 @@ export default function Notes() {
                 <div className="row-main">
                   <p className="note-text">{n.text}</p>
                   <span>
-                    {[n.createdAt && `${formatDate(n.createdAt)}, ${formatTime(n.createdAt)}`, companyName(n.companyId), tradeName(n.tradeId), n.author]
+                    {[n.createdAt && `${formatDate(n.createdAt)}, ${formatTime(n.createdAt)}`, companyName(n.companyId), tradeName(n.tradeId), memberName(n.author)]
                       .filter(Boolean)
                       .join(', ')}
                   </span>

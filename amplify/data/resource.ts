@@ -24,6 +24,21 @@ const schema = a.schema({
     size: a.integer(),
   }),
 
+  // Display name a project gives one of its members, shown instead of the
+  // email address.
+  MemberName: a.customType({
+    email: a.string().required(),
+    name: a.string().required(),
+  }),
+
+  // A person at a company, e.g. the foreman or the site manager.
+  Contact: a.customType({
+    name: a.string().required(),
+    role: a.string(),
+    phone: a.string(),
+    email: a.string(),
+  }),
+
   // Change order: work agreed after a quote was awarded.
   QuoteExtra: a.customType({
     title: a.string().required(),
@@ -51,6 +66,7 @@ const schema = a.schema({
       // back for surprises.
       budget: a.float(),
       reserve: a.float(),
+      memberNames: a.ref('MemberName').array(),
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 
@@ -68,7 +84,9 @@ const schema = a.schema({
     .model({
       ...inProject,
       name: a.string().required(),
+      // Superseded by "contacts"; kept so entries saved before still load.
       contactPerson: a.string(),
+      contacts: a.ref('Contact').array(),
       phone: a.string(),
       email: a.string(),
       address: a.string(),
