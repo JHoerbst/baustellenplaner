@@ -250,7 +250,9 @@ h2 small {
 }
 
 .toggle {
-  display: inline-flex;
+  /* Own line and only as wide as its entries, so two toggles stack. */
+  display: flex;
+  width: fit-content;
   margin-bottom: 12px;
   border: 1.5px solid var(--ink);
   border-radius: 4px;
@@ -581,14 +583,17 @@ h2 small {
 
 /* ---- Sheet and form ----------------------------------------------------- */
 
+/* On phones the sheet hangs from the top edge and is never taller than the
+   space above the on-screen keyboard (--vvh, set in main.tsx). Anchored to
+   the bottom it would sit behind the keyboard with no way to reach "save". */
 .sheet {
   width: 100%;
   max-width: 560px;
-  max-height: 92dvh;
-  margin: auto auto 0;
+  max-height: var(--vvh, 100dvh);
+  margin: 0 auto auto;
   padding: 0;
   border: 0;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0 0 10px 10px;
   background: var(--sheet);
   color: var(--ink);
 }
@@ -614,6 +619,7 @@ h2 small {
 
 @media (min-width: 640px) {
   .sheet {
+    max-height: min(92dvh, var(--vvh, 100dvh));
     margin: auto;
     border-radius: 6px;
   }
@@ -625,7 +631,7 @@ h2 small {
   }
   @keyframes sheet-in {
     from {
-      transform: translateY(24px);
+      transform: translateY(-16px);
       opacity: 0;
     }
   }
@@ -674,12 +680,18 @@ input[type='file'] {
   font-size: 0.9rem;
 }
 
+/* Stays in view while the fields scroll, so saving never needs scrolling. */
 .form-footer {
   grid-column: 1 / -1;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 4px;
+  margin: 4px 0 -16px;
+  padding: 8px 0 16px;
+  background: var(--sheet);
 }
 
 .form-footer .btn--primary {

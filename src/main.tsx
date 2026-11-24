@@ -26,6 +26,15 @@ import Invoices from './routes/Invoices';
 import Companies from './routes/Companies';
 import ProjectPage from './routes/Project';
 
+// Height that is actually visible, i.e. without the on-screen keyboard. CSS
+// units like dvh ignore the keyboard, so forms would end up behind it.
+const visual = window.visualViewport;
+if (visual) {
+  const setHeight = () => document.documentElement.style.setProperty('--vvh', `${Math.round(visual.height)}px`);
+  visual.addEventListener('resize', setHeight);
+  setHeight();
+}
+
 // HashRouter: this way Amplify Hosting needs no SPA rewrite rule.
 const router = createHashRouter([
   {
