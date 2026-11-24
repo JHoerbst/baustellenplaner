@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useApp } from '../lib/app';
+import { calendarUrl } from '../outputs';
 import { ROOM_FIELDS, ROOM_LIST_FIELDS, parseRoomList, roomLabel } from '../lib/rooms';
 import { TRADE_CATALOG, sortOrderFor } from '../lib/tradeCatalog';
 import type { Room, Trade } from '../lib/types';
@@ -35,6 +36,8 @@ export default function ProjectPage() {
   /** Email of the member whose nickname is being edited. */
   const [naming, setNaming] = useState<string | null>(null);
   const [editedRoom, setEditedRoom] = useState<Partial<Room> | null>(null);
+  /** Label of the calendar link that was just copied. */
+  const [copied, setCopied] = useState('');
   const [pastingRooms, setPastingRooms] = useState(false);
   const [editedTrade, setEditedTrade] = useState<Partial<Trade> | null>(null);
   const [editing, setEditing] = useState(false);
@@ -44,6 +47,10 @@ export default function ProjectPage() {
   const [busy, setBusy] = useState(false);
 
   if (!project) return null;
+
+  // Two UUIDs give 244 random bits; the token is the only thing protecting the feed.
+  const newCalendarToken = () =>
+    store.update('Project', project.id, { calendarToken: `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, '') });
 
   const missing = TRADE_CATALOG.filter((name) => !trades.some((g) => g.name === name));
   const maxSortOrder = Math.max(-1, ...trades.map((g) => g.sortOrder ?? 0));
@@ -186,6 +193,49 @@ export default function ProjectPage() {
           </>
         )}
       </section>
+
+      {calendarUrl && (
+        <section className="block">
+          <h2>Kalender-Abo</h2>
+          {project.calendarToken ? (
+            <>
+              <p className="hint">
+                Füg einen der Links in deinem Kalender als Abo hinzu (Google Kalender: „Weitere Kalender“, dann „Per URL“). Der Kalender holt Änderungen von
+                selbst ab, bei Google kann das einige Stunden dauern.
+              </p>
+              {[
+                { label: 'Nur Termine', url: `${calendarUrl}?p=${project.id}&t=${project.calendarToken}&nur=termine` },
+                { label: 'Termine, Fristen und Einsätze', url: `${calendarUrl}?p=${project.id}&t=${project.calendarToken}` },
+              ].map((link) => (
+                <div key={link.label} className="field calendar-link">
+                  <label htmlFor={`cal-${link.label}`}>{link.label}</label>
+                  <div>
+                    <input id={`cal-${link.label}`} readOnly value={link.url} onFocus={(e) => e.target.select()} />
+                    <button type="button" className="btn" onClick={() => navigator.clipboard.writeText(link.url).then(() => setCopied(link.label))}>
+                      {copied === link.label ? 'Kopiert' : 'Kopieren'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <p className="hint">Wer einen Link kennt, kann die Einträge ohne Anmeldung lesen. Mit einem neuen Link wird der alte ungültig.</p>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => window.confirm('Neuen Link erzeugen? Bestehende Kalender-Abos hören dann auf zu funktionieren.') && newCalendarToken()}
+              >
+                Neuen Link erzeugen
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="hint">Termine, Fristen und Einsätze im eigenen Kalender sehen, in Google Kalender oder am iPhone.</p>
+              <button type="button" className="btn" onClick={newCalendarToken}>
+                Kalender-Link erzeugen
+              </button>
+            </>
+          )}
+        </section>
+      )}
 
       {store.cloud && (
         <section className="block">

@@ -1493,3 +1493,21 @@ a.sched-name {
   grid-row: 1 / span 2;
   align-self: center;
 }
+
+/* ---- Calendar links ---------------------------------------------------- */
+
+.calendar-link {
+  margin-top: 10px;
+}
+
+.calendar-link > div {
+  display: flex;
+  gap: 8px;
+}
+
+.calendar-link input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}

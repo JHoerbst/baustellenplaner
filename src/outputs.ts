@@ -10,3 +10,6 @@ const outputs = Object.values(found)[0];
 
 /** A backend is only there if both the auth and the data block exist. */
 export const cloudOutputs = outputs?.auth && outputs?.data ? outputs : null;
+
+/** Address of the calendar feed function; only known once the backend is deployed. */
+export const calendarUrl = (cloudOutputs?.custom as { calendarUrl?: string } | undefined)?.calendarUrl ?? null;

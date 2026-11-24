@@ -21,6 +21,8 @@ und am Rechner.
 - **Bestellungen**: was Lieferzeit hat, mit spätestem Bestelltermin,
   zugesagter Lieferung und dem Tag, ab dem es gebraucht wird; im Zeitplan
   sichtbar, mit Warnung, wenn es zu spät käme
+- **Kalender-Abo**: Termine, Fristen und Einsätze als Abo in Google oder
+  Apple Kalender, über einen geheimen Link je Projekt
 - **Termine**: nach Tagen gruppiert, mit Firma und Ort
 - **Aufgaben**: mit Zuständigkeit und Frist, Filter "Meine"
 - **Notizen**: von überall ein Tipp zum leeren Textfeld, etwa während eines

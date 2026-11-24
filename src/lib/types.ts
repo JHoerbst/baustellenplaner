@@ -14,6 +14,8 @@ export type Project = Base & {
   reserve?: number | null;
   /** Nicknames shown instead of email addresses. */
   memberNames?: { email: string; name: string }[] | null;
+  /** Secret in the calendar feed's address. */
+  calendarToken?: string | null;
 };
 
 export type Trade = InProject & { name: string; sortOrder?: number | null; selfPerformed?: boolean | null };

@@ -62,7 +62,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   Ausgaben und noch offene Aufträge, mit Warnung. Budget je Gewerk bleibt
   bewusst weg. Kostenkontrolle ist die Kernfunktion fast aller verglichenen
   Werkzeuge.
-- [ ] **Kalender-Abo.** Termine, Fristen und Einsätze im Handy-Kalender.
+- [x] **Kalender-Abo.** Termine, Fristen und Einsätze im Handy-Kalender.
   Geht erst mit Backend.
 
 ## B. Für den eigenen Umbau, mittlerer Nutzen

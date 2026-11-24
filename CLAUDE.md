@@ -23,6 +23,7 @@ No test setup and no linter; `npm run typecheck` is the verification step.
 - `src/lib/fileUrl.ts`: `useFileUrl` gives a cached URL for showing a stored file in `<img>`.
 - `src/ui/PlanViewer.tsx`: zoomable view for plans and photos. PDFs are rendered by pdf.js (lazy-loaded): a low-resolution overview plus a detail canvas that redraws the visible region at screen resolution after each gesture. Images are shown directly.
 - Access control: one Cognito group per project (`p-<uuid>`), models use `allow.groupDefinedIn('group')`. `amplify/functions/project` manages groups and invitations, `amplify/functions/files` issues signed S3 URLs; both check membership via `functions/shared/group.ts`.
+- `amplify/functions/calendar` serves the iCalendar feed through a public Function URL; a secret token on the project protects it. It reads DynamoDB directly (tables listed in `calendar/tables.ts`), so a new model that should appear in calendars has to be added there.
 - Self sign-up is disabled in `backend.ts`; accounts are created by invitation.
 
 ## Conventions

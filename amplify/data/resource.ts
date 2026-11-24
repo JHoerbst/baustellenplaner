@@ -67,6 +67,8 @@ const schema = a.schema({
       budget: a.float(),
       reserve: a.float(),
       memberNames: a.ref('MemberName').array(),
+      // Secret in the calendar feed's address; empty until a member creates the link.
+      calendarToken: a.string(),
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 
