@@ -79,6 +79,18 @@ im Rahmen weniger Cent pro Monat.
    Das vorläufige Passwort kommt per E-Mail. Alle weiteren Personen lädst du in
    der App unter Projekt ein.
 
+### Eigene Domain
+
+Die Domain verbindest du in der Amplify Console. Damit auch die Einladungsmail
+auf sie zeigt, setz dort die Umgebungsvariable `APP_URL`, zum Beispiel
+`https://baustelle.example.com`.
+
+### Wenn du den Code veränderst
+
+Die App zeigt unter „Projekt" einen Link zum Quellcode, weil die AGPL das für
+einen Betrieb im Netz verlangt. Betreibst du eine veränderte Version, trag in
+`src/ui/SourceLink.tsx` die Adresse deines eigenen Repositories ein.
+
 ## Aufbau
 
 - `src/` Vite + React. `src/lib/store.ts` ist die einzige Schnittstelle zu den

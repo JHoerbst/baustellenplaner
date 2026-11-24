@@ -4,7 +4,9 @@ import { defineAuth } from '@aws-amplify/backend';
 // sandbox has neither, so the invitation simply carries no link.
 const appId = process.env.AWS_APP_ID;
 const branch = process.env.AWS_BRANCH;
-const address = appId && branch ? `https://${branch}.${appId}.amplifyapp.com` : null;
+// APP_URL is for a custom domain: set it as an environment variable in the
+// Amplify console, otherwise the invitation links to the amplifyapp.com address.
+const address = process.env.APP_URL ?? (appId && branch ? `https://${branch}.${appId}.amplifyapp.com` : null);
 
 /**
  * Sign-in by email. Nobody can self-register (see backend.ts): the first

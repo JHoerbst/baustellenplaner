@@ -6,6 +6,7 @@ import { TRADE_CATALOG, sortOrderFor } from '../lib/tradeCatalog';
 import type { Room, Trade } from '../lib/types';
 import { Sheet, EntityForm, type Field } from '../ui/EntityForm';
 import { PageTitle } from '../ui/Layout';
+import { SourceLink } from '../ui/SourceLink';
 import Start from './Start';
 
 const PROJECT_FIELDS: Field[] = [
@@ -250,6 +251,8 @@ export default function ProjectPage() {
           </button>
         </section>
       )}
+
+      <SourceLink />
 
       {editing && (
         <EntityForm

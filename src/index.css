@@ -1522,3 +1522,15 @@ a.sched-name {
 .empty--short {
   padding: 4px 0;
 }
+
+/* ---- Source link ------------------------------------------------------- */
+
+.source-link {
+  margin-top: 28px;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.source-link a {
+  color: var(--chalk);
+}

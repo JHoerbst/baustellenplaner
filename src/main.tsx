@@ -10,6 +10,7 @@ import { cloudOutputs } from './outputs';
 import { AppProvider, useApp } from './lib/app';
 import { localStore, type Store } from './lib/store';
 import { Layout } from './ui/Layout';
+import { SourceLink } from './ui/SourceLink';
 import Start from './routes/Start';
 import Overview from './routes/Overview';
 import Quotes from './routes/Quotes';
@@ -67,6 +68,7 @@ function Gate() {
         <h1>Baustellenplaner</h1>
         <p>Termine, Angebote und Aufgaben für euren Umbau an einem Ort. Leg zuerst euer Projekt an.</p>
         <Start />
+        <SourceLink />
       </main>
     );
   }
