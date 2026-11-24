@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { useApp } from '../lib/app';
+import { roomLabel } from '../lib/rooms';
 import { formatDate, relativeDay, daysUntil } from '../lib/format';
 import type { Task } from '../lib/types';
 import { EntityForm, type Field } from '../ui/EntityForm';
-import { Empty, PageTitle } from '../ui/Layout';
+import { Empty, PageTitle, TasksSwitch } from '../ui/Layout';
 
 export default function Tasks() {
-  const { tasks, trades, members, me, save, store } = useApp();
+  const { tasks, trades, rooms, members, me, save, store } = useApp();
+  const roomName = (id?: string | null) => {
+    const room = rooms.find((r) => r.id === id);
+    return room && roomLabel(room);
+  };
   const [opened, setOpened] = useState<Partial<Task> | null>(null);
   const [onlyMine, setOnlyMine] = useState(false);
   const tradeName = (id?: string | null) => trades.find((g) => g.id === id)?.name;
@@ -15,7 +20,8 @@ export default function Tasks() {
     { name: 'title', label: 'Was ist zu tun?', required: true },
     { name: 'assignee', label: 'Wer kümmert sich?', type: 'select', half: true, options: members.map((m) => ({ value: m, label: m })) },
     { name: 'dueDate', label: 'Fällig am', type: 'date', half: true },
-    { name: 'tradeId', label: 'Gewerk', type: 'select', options: trades.map((g) => ({ value: g.id, label: g.name })) },
+    { name: 'tradeId', label: 'Gewerk', type: 'select', half: true, options: trades.map((g) => ({ value: g.id, label: g.name })) },
+    { name: 'roomId', label: 'Raum', type: 'select', half: true, options: rooms.map((r) => ({ value: r.id, label: roomLabel(r) })) },
     { name: 'note', label: 'Notiz', type: 'textarea' },
   ];
 
@@ -43,7 +49,7 @@ export default function Tasks() {
               {formatDate(a.dueDate)} ({relativeDay(a.dueDate)}){' '}
             </span>
           )}
-          {[a.assignee, tradeName(a.tradeId)].filter(Boolean).join(', ')}
+          {[a.assignee, tradeName(a.tradeId), roomName(a.roomId)].filter(Boolean).join(', ')}
         </span>
       </button>
     </li>
@@ -54,6 +60,7 @@ export default function Tasks() {
       <PageTitle addLabel="Aufgabe" onAdd={() => setOpened({ assignee: members.includes(me) ? me : undefined })}>
         Aufgaben
       </PageTitle>
+      <TasksSwitch />
 
       <div className="toggle" role="group" aria-label="Filter">
         <button type="button" aria-pressed={!onlyMine} onClick={() => setOnlyMine(false)}>

@@ -39,7 +39,7 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
 export type Field = {
   name: string;
   label: string;
-  type?: 'text' | 'textarea' | 'date' | 'datetime-local' | 'amount' | 'integer' | 'select' | 'tel' | 'email' | 'url';
+  type?: 'text' | 'textarea' | 'date' | 'datetime-local' | 'amount' | 'decimal' | 'integer' | 'select' | 'tel' | 'email' | 'url';
   options?: { value: string; label: string }[];
   required?: boolean;
   /** Earlier values offered while typing (plain text fields only). */
@@ -55,7 +55,7 @@ type Values = Record<string, unknown>;
 function toInput(field: Field, value: unknown): string {
   if (value == null || value === '') return '';
   if (field.type === 'datetime-local') return toInputValue(String(value));
-  if (field.type === 'amount') return String(value).replace('.', ',');
+  if (field.type === 'amount' || field.type === 'decimal') return String(value).replace('.', ',');
   return String(value);
 }
 
@@ -64,7 +64,7 @@ function toValue(field: Field, text: string): unknown {
   const s = text.trim();
   if (!s) return null;
   if (field.type === 'datetime-local') return new Date(s).toISOString();
-  if (field.type === 'amount') return parseNumber(s);
+  if (field.type === 'amount' || field.type === 'decimal') return parseNumber(s);
   if (field.type === 'integer') return Number.isFinite(parseInt(s, 10)) ? parseInt(s, 10) : null;
   return s;
 }
@@ -141,6 +141,8 @@ export function EntityForm({
                 </select>
               ) : f.type === 'integer' ? (
                 <input type="text" inputMode="numeric" pattern="[0-9]*" {...common} />
+              ) : f.type === 'decimal' ? (
+                <input type="text" inputMode="decimal" {...common} />
               ) : f.type === 'amount' ? (
                 <input type="text" inputMode="decimal" placeholder="€ inkl. USt." {...common} />
               ) : (

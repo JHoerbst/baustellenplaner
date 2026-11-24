@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { useApp } from '../lib/app';
+import { ROOM_FIELDS, ROOM_LIST_FIELDS, parseRoomList, roomLabel } from '../lib/rooms';
 import { TRADE_CATALOG, sortOrderFor } from '../lib/tradeCatalog';
-import type { Trade } from '../lib/types';
+import type { Room, Trade } from '../lib/types';
 import { Sheet, EntityForm, type Field } from '../ui/EntityForm';
 import { PageTitle } from '../ui/Layout';
 import Start from './Start';
@@ -28,7 +29,9 @@ const TRADE_FIELDS: Field[] = [
 ];
 
 export default function ProjectPage() {
-  const { project, projects, selectProject, trades, members, loadMembers, me, save, store } = useApp();
+  const { project, projects, selectProject, trades, rooms, members, loadMembers, me, save, store } = useApp();
+  const [editedRoom, setEditedRoom] = useState<Partial<Room> | null>(null);
+  const [pastingRooms, setPastingRooms] = useState(false);
   const [editedTrade, setEditedTrade] = useState<Partial<Trade> | null>(null);
   const [editing, setEditing] = useState(false);
   const [addingProject, setAddingProject] = useState(false);
@@ -112,6 +115,40 @@ export default function ProjectPage() {
 
       <section className="block">
         <div className="page-title">
+          <h2>Räume</h2>
+          <div className="btn-row btn-row--tight">
+            <button type="button" className="btn" onClick={() => setPastingRooms(true)}>
+              Mehrere einfügen
+            </button>
+            <button type="button" className="btn" onClick={() => setEditedRoom({})}>
+              Raum hinzufügen
+            </button>
+          </div>
+        </div>
+        {rooms.length === 0 ? (
+          <p className="empty">Noch kein Raum. Leg die Räume einmal an, dann kannst du Fotos, Mängel und Aufgaben zuordnen.</p>
+        ) : (
+          <ul className="list">
+            {rooms.map((r) => (
+              <li key={r.id}>
+                <button type="button" className="row row--button" onClick={() => setEditedRoom(r)}>
+                  <div className="row-main">
+                    <strong>{roomLabel(r)}</strong>
+                  </div>
+                  {r.area != null && (
+                    <div className="row-amount">
+                      <strong>{r.area.toLocaleString('de-AT', { minimumFractionDigits: 2 })} m²</strong>
+                    </div>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="block">
+        <div className="page-title">
           <h2>Gewerke</h2>
           <button type="button" className="btn" onClick={() => setEditedTrade({})}>
             Eigenes Gewerk
@@ -160,6 +197,31 @@ export default function ProjectPage() {
           value={project}
           onClose={() => setEditing(false)}
           onSave={(d) => store.update('Project', project.id, d)}
+        />
+      )}
+
+      {pastingRooms && (
+        <EntityForm
+          title="Mehrere Räume einfügen"
+          fields={ROOM_LIST_FIELDS(rooms)}
+          value={{}}
+          onClose={() => setPastingRooms(false)}
+          onSave={async (d) => {
+            for (const room of parseRoomList(String(d.list ?? ''))) {
+              await save('Room', undefined, { ...room, floor: (d.floor as string | null) ?? null });
+            }
+          }}
+        />
+      )}
+
+      {editedRoom && (
+        <EntityForm
+          title={editedRoom.id ? 'Raum bearbeiten' : 'Neuer Raum'}
+          fields={ROOM_FIELDS(rooms)}
+          value={editedRoom}
+          onClose={() => setEditedRoom(null)}
+          onSave={(d) => save('Room', editedRoom.id, d)}
+          onDelete={editedRoom.id ? () => store.remove('Room', editedRoom.id!) : undefined}
         />
       )}
 

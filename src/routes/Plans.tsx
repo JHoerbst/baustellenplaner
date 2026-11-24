@@ -5,7 +5,7 @@ import { formatDate } from '../lib/format';
 import type { Plan } from '../lib/types';
 import { PlanViewer } from '../ui/PlanViewer';
 import { EntityForm, type Field } from '../ui/EntityForm';
-import { DocsSwitch, Empty, PageTitle } from '../ui/Layout';
+import { Empty, PageTitle } from '../ui/Layout';
 
 const FIELDS: Field[] = [
   { name: 'title', label: 'Bezeichnung', required: true },
@@ -45,7 +45,6 @@ export default function Plans() {
       <PageTitle addLabel="Plan" onAdd={() => fileInput.current?.click()}>
         Pläne
       </PageTitle>
-      <DocsSwitch />
       <input
         ref={fileInput}
         type="file"

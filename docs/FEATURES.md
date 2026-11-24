@@ -42,7 +42,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
   fotografieren, damit man später weiß, wo Leitungen liegen. Braucht: Fotos
   mit Raum, Datum und Beschreibung, Ansicht je Raum, Erinnerung im Zeitplan
   vor dem Verputzen und vor dem Estrich.
-- [ ] **Mängelliste.** Mangel mit Foto, Firma, Frist und Stand bis zur
+- [x] **Mängelliste.** Mangel mit Foto, Firma, Frist und Stand bis zur
   Behebung. Laut Ratgebern werden Mängel bei der Abnahme schriftlich
   festgehalten, und die Schlussrechnung folgt erst danach.
 - [ ] **Entscheidungen.** Offene Fragen (Fliesen, Böden, Steckdosen) mit
@@ -104,7 +104,13 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
 - [ ] **Export und Hausakte.** Alles als PDF oder ZIP: Bautagebuch,
   Mängelliste, Rechnungen mit Belegen, Pläne. Auch als Backup.
 - [ ] **Nur-Lesen-Zugang.** Für Planer, Eltern oder die Bank.
-- [ ] **Raumbuch.** Je Raum Maße, Materialien, Farben, Steckdosen.
+- [ ] **Raumbuch.** Räume mit Geschoss und Fläche gibt es; es fehlen eine
+  Seite je Raum (alle Fotos, Mängel, Aufgaben dazu) sowie Materialien,
+  Farben und Steckdosen.
+- [ ] **Räume aus dem Plan auslesen.** Viele Pläne enthalten den Text nur
+  als Zeichnung, nicht als lesbaren Text; automatisch geht es dann nur mit
+  Texterkennung oder einem KI-Dienst. Bis dahin: Raumtabelle abtippen und
+  über „Mehrere einfügen" eintragen.
 - [ ] **Checklisten als Vorlage.** Versicherungen, Behördenwege,
   Reihenfolge der Gewerke, Abnahme.
 - [ ] **Firmensuche.** Über Google oder aus einer eingefügten

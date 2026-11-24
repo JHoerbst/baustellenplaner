@@ -16,7 +16,8 @@ const FIELDS: Field[] = [
 ];
 
 export default function Companies() {
-  const { companies, quotes, trades, save, store } = useApp();
+  const { companies, quotes, trades, defects, save, store } = useApp();
+  const openDefects = (companyId: string) => defects.filter((d) => d.companyId === companyId && d.status !== 'fixed').length;
   const [opened, setOpened] = useState<Partial<Company> | null>(null);
 
   // A company's trades follow from its quotes.
@@ -38,6 +39,7 @@ export default function Companies() {
               <button type="button" className="row-main row-main--button" onClick={() => setOpened(f)}>
                 <strong>{f.name}</strong>
                 <span>{[f.contactPerson, ...tradesOf(f.id)].filter(Boolean).join(', ')}</span>
+                {openDefects(f.id) > 0 && <span className="is-urgent">{openDefects(f.id)} offene Mängel</span>}
               </button>
               {f.phone && (
                 <a className="icon-btn" href={`tel:${f.phone.replace(/\s/g, '')}`} aria-label={`${f.name} anrufen`}>

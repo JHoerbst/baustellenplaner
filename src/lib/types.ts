@@ -57,6 +57,7 @@ export type Task = InProject & {
   done: boolean;
   dueDate?: string | null;
   assignee?: string | null;
+  roomId?: string | null;
   tradeId?: string | null;
   note?: string | null;
 };
@@ -115,10 +116,32 @@ export type Invoice = InProject & {
 export type Photo = InProject & {
   attachment: Attachment;
   thumb?: Attachment | null;
-  room?: string | null;
+  roomId?: string | null;
   takenOn: string;
   description?: string | null;
   tradeId?: string | null;
+};
+
+export type Room = InProject & { name: string; floor?: string | null; area?: number | null };
+
+export const DEFECT_STATUS = {
+  open: 'Offen',
+  reported: 'Der Firma gemeldet',
+  fixed: 'Behoben',
+};
+export type DefectStatus = keyof typeof DEFECT_STATUS;
+
+export type Defect = InProject & {
+  title: string;
+  description?: string | null;
+  roomId?: string | null;
+  status: string;
+  companyId?: string | null;
+  tradeId?: string | null;
+  foundOn: string;
+  deadline?: string | null;
+  fixedOn?: string | null;
+  attachments?: Attachment[] | null;
 };
 
 export type Tables = {
@@ -134,6 +157,8 @@ export type Tables = {
   Note: Note;
   Invoice: Invoice;
   Photo: Photo;
+  Defect: Defect;
+  Room: Room;
 };
 export type Kind = keyof Tables;
 export type New<A extends Kind> = Omit<Tables[A], 'id' | 'createdAt' | 'updatedAt'>;

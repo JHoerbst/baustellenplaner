@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { CalendarDays, CalendarRange, DraftingCompass, Euro, HardHat, House, ListChecks, NotebookPen, Plus, Settings } from 'lucide-react';
+import { Camera, CalendarDays, CalendarRange, DraftingCompass, Euro, HardHat, House, ListChecks, NotebookPen, Plus, Settings } from 'lucide-react';
 import { useApp } from '../lib/app';
 
 const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPath?: string }[] = [
@@ -9,9 +9,10 @@ const NAV_ITEMS: { path: string; label: string; Icon: typeof House; alsoPath?: s
   // Quotes and invoices share one slot, see CostsSwitch.
   { path: '/angebote', label: 'Kosten', Icon: Euro, alsoPath: '/rechnungen' },
   { path: '/termine', label: 'Termine', Icon: CalendarDays },
-  { path: '/aufgaben', label: 'Aufgaben', Icon: ListChecks },
-  // Plans and photos share one slot, see DocsSwitch.
-  { path: '/plaene', label: 'Pläne', Icon: DraftingCompass, alsoPath: '/fotos' },
+  // Tasks and defects share one slot, see TasksSwitch.
+  { path: '/aufgaben', label: 'Aufgaben', Icon: ListChecks, alsoPath: '/maengel' },
+  { path: '/plaene', label: 'Pläne', Icon: DraftingCompass },
+  { path: '/fotos', label: 'Fotos', Icon: Camera },
 ];
 
 export function Layout() {
@@ -28,7 +29,7 @@ export function Layout() {
         <NavLink to="/notizen" className="icon-btn icon-btn--accent" aria-label="Notiz schreiben">
           <NotebookPen size={20} />
         </NavLink>
-        {/* Six sections fill the bar; companies are needed less often. */}
+        {/* Seven sections fill the bar; companies are needed less often. */}
         <NavLink to="/firmen" className="icon-btn" aria-label="Firmen">
           <HardHat size={20} />
         </NavLink>
@@ -82,12 +83,12 @@ export function CostsSwitch() {
   );
 }
 
-/** Switch between the two pages under "Pläne". */
-export function DocsSwitch() {
+/** Switch between the two pages under "Aufgaben". */
+export function TasksSwitch() {
   return (
-    <nav className="toggle" aria-label="Pläne und Fotos">
-      <NavLink to="/plaene">Pläne</NavLink>
-      <NavLink to="/fotos">Fotos</NavLink>
+    <nav className="toggle" aria-label="Aufgaben und Mängel">
+      <NavLink to="/aufgaben">Aufgaben</NavLink>
+      <NavLink to="/maengel">Mängel</NavLink>
     </nav>
   );
 }

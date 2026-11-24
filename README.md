@@ -19,11 +19,15 @@ und am Rechner.
 - **Aufgaben**: mit Zuständigkeit und Frist, Filter "Meine"
 - **Notizen**: von überall ein Tipp zum leeren Textfeld, etwa während eines
   Anrufs; Firma und Gewerk lassen sich später zuordnen
+- **Mängel**: mit Foto, Raum, zuständiger Firma und Frist bis zur Behebung,
+  gruppiert nach Firma
 - **Pläne**: Grundrisse und Schnitte als PDF oder Bild, in der App zum
   Hineinzoomen und Verschieben (Finger, Mausrad, Doppeltipp)
 - **Fotos**: nach Raum und Datum abgelegt, zum Hineinzoomen; die App erinnert
   vor Putz, Estrich und Trockenbau ans Fotografieren der Leitungen
 - **Firmen**: Kontakte mit Anrufen und E-Mail per Tipp
+- **Räume**: einmal anlegen (mit Geschoss), dann Fotos, Mängel und Aufgaben
+  zuordnen
 - **Projekt**: Gewerke einzeln zuschalten oder eigene anlegen, auch als
   Eigenleistung, Mitglieder per E-Mail einladen,
   mehrere Projekte

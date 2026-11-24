@@ -9,7 +9,8 @@ const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, me, assignments } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, me, assignments } = useApp();
+  const openDefects = defects.filter((d) => d.status !== 'fixed');
   const toPay = invoices.filter((r) => !r.paid);
   const companyName = (id?: string | null) => companies.find((f) => f.id === id)?.name;
 
@@ -25,7 +26,8 @@ export default function Overview() {
       deadlines:
         tasks.filter((a) => !a.done && a.dueDate === day).length +
         quotes.filter((a) => a.validUntil === day && (a.status === 'received' || a.status === 'negotiating')).length +
-        invoices.filter((r) => !r.paid && r.dueDate === day).length,
+        invoices.filter((r) => !r.paid && r.dueDate === day).length +
+        defects.filter((d) => d.status !== 'fixed' && d.deadline === day).length,
     };
   });
 
@@ -121,6 +123,19 @@ export default function Overview() {
           </ul>
         )}
       </section>
+
+      {openDefects.length > 0 && (
+        <section className="block">
+          <h2>
+            <Link to="/maengel">Mängel</Link>
+          </h2>
+          <p className="figure">
+            <strong>{openDefects.length}</strong> offen
+            {openDefects.some((d) => d.deadline && daysUntil(d.deadline) <= 0) &&
+              `, bei ${openDefects.filter((d) => d.deadline && daysUntil(d.deadline) <= 0).length} ist die Frist abgelaufen`}
+          </p>
+        </section>
+      )}
 
       {toPay.length > 0 && (
         <section className="block">

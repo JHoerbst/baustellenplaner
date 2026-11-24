@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { sortRooms } from './rooms';
 import type { Store } from './store';
-import type { Quote, Kind, Task, Assignment, Company, Trade, Helper, New, Note, Photo, Plan, Project, Invoice, Tables, Appointment } from './types';
+import type { Defect, Quote, Kind, Task, Assignment, Company, Trade, Helper, New, Note, Photo, Plan, Project, Invoice, Room, Tables, Appointment } from './types';
 
 type InProjectKind = Exclude<Kind, 'Project'>;
 
@@ -23,6 +24,9 @@ type App = {
   notes: Note[];
   /** Newest first. */
   photos: Photo[];
+  defects: Defect[];
+  /** By floor, then name. */
+  rooms: Room[];
   /** Newest first. */
   invoices: Invoice[];
   members: string[];
@@ -74,6 +78,8 @@ export function AppProvider({ store, me, children }: { store: Store; me: string;
   const helpers = useTable(store, 'Helper', pid);
   const notes = useTable(store, 'Note', pid);
   const photos = useTable(store, 'Photo', pid);
+  const defects = useTable(store, 'Defect', pid);
+  const rooms = useTable(store, 'Room', pid);
   const invoices = useTable(store, 'Invoice', pid);
 
   const loadMembers = useCallback(() => {
@@ -102,6 +108,8 @@ export function AppProvider({ store, me, children }: { store: Store; me: string;
       helpers: [...helpers].sort((a, b) => a.name.localeCompare(b.name, 'de')),
       notes: [...notes].sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? '')),
       photos: [...photos].sort((a, b) => b.takenOn.localeCompare(a.takenOn)),
+      defects,
+      rooms: sortRooms(rooms),
       invoices: [...invoices].sort((a, b) => b.date.localeCompare(a.date)),
       members,
       loadMembers,
@@ -111,7 +119,7 @@ export function AppProvider({ store, me, children }: { store: Store; me: string;
         else await store.create(kind, { ...payload, group: project.group, projectId: project.id } as never);
       },
     }),
-    [store, me, projects, project, trades, companies, quotes, appointments, tasks, plans, assignments, helpers, notes, photos, invoices, members, loadMembers]
+    [store, me, projects, project, trades, companies, quotes, appointments, tasks, plans, assignments, helpers, notes, photos, defects, rooms, invoices, members, loadMembers]
   );
 
   return <AppContext.Provider value={app}>{children}</AppContext.Provider>;

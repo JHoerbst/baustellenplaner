@@ -844,10 +844,11 @@ input[type='file'] {
   text-align: center;
 }
 
-/* Six sections: set them a little tighter on narrow phones. */
-@media (max-width: 400px) {
+/* Seven sections: set them tighter on phones so every label fits. */
+@media (max-width: 480px) {
   .navbar a {
-    font-size: 0.66rem;
+    font-size: 0.62rem;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -1129,6 +1130,22 @@ input[type='file'] {
 
 .photo-room {
   margin-bottom: 12px;
+}
+
+.photo-room label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.photo-room > div {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.photo-room select {
+  flex: 1;
+  min-width: 0;
   max-width: 320px;
 }
 
@@ -1196,4 +1213,9 @@ input[type='file'] {
   font-size: 0.9rem;
   border-left: 4px solid var(--ruler);
   background: var(--sheet);
+}
+
+.btn-row--tight {
+  margin-top: 0;
+  justify-content: flex-end;
 }

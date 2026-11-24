@@ -96,6 +96,7 @@ const schema = a.schema({
       done: a.boolean().required(),
       dueDate: a.date(),
       assignee: a.string(),
+      roomId: a.id(),
       tradeId: a.id(),
       note: a.string(),
     })
@@ -161,6 +162,35 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.groupDefinedIn('group')]),
 
+  // Rooms are kept once per project and referenced by photos, defects and tasks.
+  Room: a
+    .model({
+      ...inProject,
+      name: a.string().required(),
+      floor: a.string(),
+      // Floor area in square metres.
+      area: a.float(),
+    })
+    .authorization((allow) => [allow.groupDefinedIn('group')]),
+
+  // Defects until they are fixed. "status" is one of the keys of
+  // DEFECT_STATUS in src/lib/types.ts.
+  Defect: a
+    .model({
+      ...inProject,
+      title: a.string().required(),
+      description: a.string(),
+      roomId: a.id(),
+      status: a.string().required(),
+      companyId: a.id(),
+      tradeId: a.id(),
+      foundOn: a.date().required(),
+      deadline: a.date(),
+      fixedOn: a.date(),
+      attachments: a.ref('Attachment').array(),
+    })
+    .authorization((allow) => [allow.groupDefinedIn('group')]),
+
   // Site photos by room and date. "thumb" is a small preview made in the
   // browser so the grid does not load the originals.
   Photo: a
@@ -168,7 +198,7 @@ const schema = a.schema({
       ...inProject,
       attachment: a.ref('Attachment').required(),
       thumb: a.ref('Attachment'),
-      room: a.string(),
+      roomId: a.id(),
       takenOn: a.date().required(),
       description: a.string(),
       tradeId: a.id(),
