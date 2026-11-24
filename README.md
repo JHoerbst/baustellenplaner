@@ -79,4 +79,10 @@ gibt es noch keine.
 
 ## Lizenz
 
-MIT, siehe [LICENSE](LICENSE).
+Copyright (C) 2026 JHoerbst
+
+GNU Affero General Public License, Version 3 (AGPL-3.0), siehe
+[LICENSE](LICENSE). Kurz gesagt: Du darfst die App frei nutzen, selbst
+betreiben und verändern. Wer eine veränderte Version weitergibt oder als
+Dienst im Netz betreibt, muss deren Quellcode unter derselben Lizenz
+offenlegen. Die Software kommt ohne jede Gewährleistung.
