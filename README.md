@@ -6,13 +6,18 @@ und am Rechner.
 
 ## Was die App kann
 
-- **Übersicht**: die nächsten 14 Tage auf einen Blick, kommende Termine,
-  Angebote, die ablaufen oder unbeantwortet sind, fällige Aufgaben
+- **Übersicht**: die nächsten 14 Tage auf einen Blick, wer morgen auf der
+  Baustelle ist und für wie viele gekocht wird, die kommenden sieben Tage Tag
+  für Tag, dazu alles, was gerade Aufmerksamkeit braucht: ablaufende
+  Angebote, fällige Bestellungen und Entscheidungen, offene Rechnungen,
+  Mängel und Aufgaben
 - **Budget**: ein Gesamtbudget mit Puffer; die App rechnet aus Rechnungen,
   Aufträgen, Bestellungen und den günstigsten offenen Angeboten hoch und
   warnt, bevor es eng wird
 - **Angebote**: pro Gewerk nebeneinander, günstigstes zuerst, mit Abstand zum
-  günstigsten, Stand (angefragt bis beauftragt), Gültigkeit, PDF und Fotos als Anhang
+  günstigsten, Stand (angefragt bis beauftragt), Gültigkeit, PDF und Fotos als
+  Anhang; bei beauftragten Angeboten Nachträge und was schon verrechnet und
+  bezahlt ist
 - **Zeitplan**: vier Wochen im Blick, Gewerke als Balken, Helfer pro Tag
   antippen, darunter für jeden Tag, für wie viele gekocht wird
 - **Rechnungen**: Einkäufe (Baustoffe, Werkzeug) und Handwerker-Rechnungen
@@ -23,8 +28,9 @@ und am Rechner.
   sichtbar, mit Warnung, wenn es zu spät käme
 - **Kalender-Abo**: Termine, Fristen und Einsätze als Abo in Google oder
   Apple Kalender, über einen geheimen Link je Projekt
-- **Termine**: nach Tagen gruppiert, mit Firma und Ort
-- **Aufgaben**: mit Zuständigkeit und Frist, Filter "Meine"
+- **Termine**: nach Tagen gruppiert, mit Firma und Ort; von jeder Seite aus
+  mit einem Tipp neu anlegen
+- **Aufgaben**: mit Zuständigkeit, Frist und Raum, Filter „Meine"
 - **Notizen**: von überall ein Tipp zum leeren Textfeld, etwa während eines
   Anrufs; Firma und Gewerk lassen sich später zuordnen
 - **Entscheidungen**: offene Fragen wie Fliesen oder Steckdosen mit
@@ -37,8 +43,9 @@ und am Rechner.
   vor Putz, Estrich und Trockenbau ans Fotografieren der Leitungen
 - **Firmen**: mehrere Ansprechpersonen je Firma mit Funktion (z.B. Polier),
   Anrufen und E-Mail per Tipp
-- **Räume**: einmal anlegen (mit Geschoss), dann Fotos, Mängel und Aufgaben
-  zuordnen
+- **Räume**: einmal anlegen, mit Geschoss und Fläche, auch mehrere auf
+  einmal aus einer Liste; dann Fotos, Mängel, Aufgaben, Entscheidungen und
+  Bestellungen zuordnen
 - **Projekt**: Gewerke einzeln zuschalten oder eigene anlegen, auch als
   Eigenleistung, Mitglieder per E-Mail einladen und ihnen Namen geben,
   mehrere Projekte
@@ -59,8 +66,10 @@ wird geteilt.
 ## Eigene Instanz auf AWS
 
 Die App nutzt AWS Amplify Gen 2: Cognito (Anmeldung), AppSync mit DynamoDB
-(Daten, live synchronisiert) und S3 (Dateien). Bei privater Nutzung bleibt das
-im Rahmen weniger Cent pro Monat.
+(Daten, live synchronisiert), S3 (Dateien) und Lambda. Du brauchst ein
+AWS-Konto und Node.js. Die Kosten hängen von der Nutzung ab; für einen
+Haushalt sind sie nach unserer Einschätzung gering, gemessen haben wir es
+nicht.
 
 1. **Zum Entwickeln**: `npx ampx sandbox` legt ein persönliches Backend an und
    schreibt `amplify_outputs.json`. Danach `npm run dev`.
@@ -71,13 +80,18 @@ im Rahmen weniger Cent pro Monat.
 
    ```bash
    aws cognito-idp admin-create-user \
-     --user-pool-id <ID aus amplify_outputs.json> \
+     --user-pool-id <Pool-ID> \
      --username du@beispiel.at \
      --user-attributes Name=email,Value=du@beispiel.at Name=email_verified,Value=true
    ```
 
-   Das vorläufige Passwort kommt per E-Mail. Alle weiteren Personen lädst du in
-   der App unter Projekt ein.
+   Die Pool-ID beginnt mit der Region (z.B. `eu-central-1_`). Du findest sie
+   in der Amplify Console bei den Backend-Ressourcen der App oder, mit der
+   Sandbox, in `amplify_outputs.json`. Das vorläufige Passwort kommt per
+   E-Mail. Alle weiteren Personen lädst du in der App unter Projekt ein.
+4. **Bei einem öffentlichen Repository**: Lass in Amplify die Vorschauen für
+   Pull Requests ausgeschaltet, sonst kann ein fremder Pull Request einen
+   Build in deinem Konto auslösen.
 
 ### Eigene Domain
 
@@ -87,8 +101,8 @@ auf sie zeigt, setz dort die Umgebungsvariable `APP_URL`, zum Beispiel
 
 ### Wenn du den Code veränderst
 
-Die App zeigt unter „Projekt" einen Link zum Quellcode, weil die AGPL das für
-einen Betrieb im Netz verlangt. Betreibst du eine veränderte Version, trag in
+Die App zeigt unter „Projekt" und auf der Startseite einen Link zum
+Quellcode, weil die AGPL das für einen Betrieb im Netz verlangt. Betreibst du eine veränderte Version, trag in
 `src/ui/SourceLink.tsx` die Adresse deines eigenen Repositories ein.
 
 ## Aufbau
@@ -100,6 +114,10 @@ einen Betrieb im Netz verlangt. Betreibst du eine veränderte Version, trag in
   und schreiben. Dateien liegen in S3 unter `projects/<group>/` und sind nur
   über signierte URLs erreichbar, die eine Lambda nach Prüfung der
   Mitgliedschaft ausstellt.
+- Das Kalender-Abo ist der einzige Zugang ohne Anmeldung: eine Lambda mit
+  öffentlicher Adresse, die nur mit dem geheimen Schlüssel des Projekts
+  antwortet. Wer den Link kennt, kann die Kalendereinträge lesen; unter
+  „Projekt" lässt sich ein neuer Link erzeugen, der den alten ungültig macht.
 
 Der Code ist englisch, die Oberfläche deutsch; ein Glossar der Fachbegriffe
 steht in `CLAUDE.md`. `npm run typecheck` prüft Frontend und Backend. Tests
