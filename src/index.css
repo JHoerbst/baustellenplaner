@@ -1517,3 +1517,8 @@ a.sched-name {
   font-size: 0.85rem;
   color: var(--ink-2);
 }
+
+/* An empty state that is one line of information, not an invitation to act. */
+.empty--short {
+  padding: 4px 0;
+}

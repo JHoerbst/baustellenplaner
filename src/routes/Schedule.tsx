@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/app';
 import { formatDate, today, mondayOf, addDays, longDay, daysBetween, weekdayOf } from '../lib/format';
+import { DEFAULT_HOUSEHOLD, presenceOn } from '../lib/presence';
 import type { Assignment, Helper } from '../lib/types';
 import { EntityForm, type Field } from '../ui/EntityForm';
 import { PageTitle } from '../ui/Layout';
@@ -32,7 +33,7 @@ export default function Schedule() {
   const [helperDraft, setHelperDraft] = useState<Partial<Helper> | null>(null);
 
   const days = useMemo(() => Array.from({ length: COLUMNS }, (_, i) => addDays(start, i)), [start]);
-  const householdSize = project?.householdSize ?? 2;
+  const householdSize = project?.householdSize ?? DEFAULT_HOUSEHOLD;
   const tradeName = (id?: string | null) => trades.find((g) => g.id === id)?.name;
   const companyName = (id?: string | null) => companies.find((f) => f.id === id)?.name;
 
@@ -47,16 +48,7 @@ export default function Schedule() {
     { name: 'note', label: 'Notiz', type: 'textarea' },
   ];
 
-  /** Who is there on a given day, and for how many do we cook? */
-  function onDay(day: string) {
-    const helpersPresent = helpers.filter((h) => h.days?.includes(day));
-    const tradesPresent = assignments.filter((e) => e.startDate <= day && day <= e.endDate);
-    // Contractors only count Mon-Fri; at the weekend the bar stays but nobody eats.
-    const isWeekday = weekdayOf(day) % 6 !== 0;
-    const contractors = isWeekday ? tradesPresent.filter((e) => e.catered).reduce((n, e) => n + (e.people ?? 1), 0) : 0;
-    const guests = helpersPresent.length + contractors;
-    return { helpersPresent, tradesPresent, contractors, meals: guests > 0 ? guests + householdSize : 0 };
-  }
+  const onDay = (day: string) => presenceOn(day, helpers, assignments, householdSize);
 
   const cellClass = (day: string, extra = '') =>
     ['sched-cell', weekdayOf(day) % 6 === 0 && 'is-weekend', day === today() && 'is-today', day === selected && 'is-selected', extra]

@@ -3,6 +3,7 @@ import { useApp } from '../lib/app';
 import { BudgetSummary } from '../ui/BudgetSummary';
 import { orderWarning } from '../lib/materialOrders';
 import { orderStatus } from '../lib/orders';
+import { DEFAULT_HOUSEHOLD, presenceOn } from '../lib/presence';
 import { photoReminders } from '../lib/reminders';
 import { formatDate, euro, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
 
@@ -20,7 +21,7 @@ const TASKS_SHOWN = 8;
 const FOLLOW_UP_AFTER_DAYS = 10;
 
 export default function Overview() {
-  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, me, memberName, assignments, store } = useApp();
+  const { appointments, tasks, quotes, trades, companies, notes, invoices, defects, decisions, materialOrders, helpers, project, me, memberName, assignments, store } = useApp();
   const orderWarnings = materialOrders.flatMap((o) => {
     const warning = orderWarning(o);
     return warning ? [{ id: o.id, title: o.title, ...warning }] : [];
@@ -54,15 +55,22 @@ export default function Overview() {
 
   // The week ahead, day by day: appointments and which trades are on site.
   const tradeName = (id?: string | null) => trades.find((t) => t.id === id)?.name;
+  const whoIsThere = (day: string) => {
+    const p = presenceOn(day, helpers, assignments, project?.householdSize ?? DEFAULT_HOUSEHOLD);
+    return {
+      onSite: p.tradesPresent.map((a) => tradeName(a.tradeId)).filter((name): name is string => !!name),
+      helpersThere: p.helpersPresent,
+      meals: p.meals,
+    };
+  };
   const week = days.slice(0, WEEK_DAYS).map(({ day, d }) => ({
     day,
     d,
     items: appointments.filter((t) => dayOf(t.start) === day),
-    onSite: assignments
-      .filter((a) => a.startDate <= day && day <= a.endDate)
-      .map((a) => tradeName(a.tradeId))
-      .filter((name): name is string => !!name),
+    ...whoIsThere(day),
   }));
+  // Tomorrow gets its own block: who comes decides what has to be ready tonight.
+  const tomorrow = { day: days[1].day, ...whoIsThere(days[1].day) };
   const lastWeekDay = week[week.length - 1].day;
   const later = appointments.filter((t) => dayOf(t.start) > lastWeekDay).slice(0, LATER_SHOWN);
 
@@ -116,12 +124,52 @@ export default function Overview() {
 
       <section className="block">
         <h2>
+          <Link to="/zeitplan">Morgen auf der Baustelle</Link>
+        </h2>
+        {tomorrow.helpersThere.length === 0 && tomorrow.onSite.length === 0 ? (
+          <p className="empty empty--short">Für morgen ist niemand eingetragen.</p>
+        ) : (
+          <>
+            {tomorrow.meals > 0 && (
+              <p className="figure">
+                <strong>{tomorrow.meals}</strong> zum Essen
+              </p>
+            )}
+            <ul className="list">
+              {tomorrow.onSite.map((name, i) => (
+                <li key={`trade-${i}`} className="row">
+                  <div className="row-main">
+                    <strong>{name}</strong>
+                    <span>Gewerk</span>
+                  </div>
+                </li>
+              ))}
+              {tomorrow.helpersThere.map((h) => (
+                <li key={h.id} className="row">
+                  <div className="row-main">
+                    <strong>{h.name}</strong>
+                    <span>{h.note || 'hilft mit'}</span>
+                  </div>
+                  {h.phone && (
+                    <a className="link" href={`tel:${h.phone.replace(/\s/g, '')}`}>
+                      {h.phone}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </section>
+
+      <section className="block">
+        <h2>
           <Link to="/termine">Die nächsten sieben Tage</Link>
         </h2>
         {/* One row per day, also for days without anything, so the shape of the week shows. */}
         <ol className="week">
-          {week.map(({ day, d, items, onSite }, i) => (
-            <li key={day} className={['week-day', i === 0 && 'is-today', d.getDay() % 6 === 0 && 'is-weekend', !items.length && !onSite.length && 'is-free'].filter(Boolean).join(' ')}>
+          {week.map(({ day, d, items, onSite, helpersThere }, i) => (
+            <li key={day} className={['week-day', i === 0 && 'is-today', d.getDay() % 6 === 0 && 'is-weekend', !items.length && !onSite.length && !helpersThere.length && 'is-free'].filter(Boolean).join(' ')}>
               <div className="week-date">
                 <span>{i === 0 ? 'Heute' : WEEKDAY_NAMES[d.getDay()]}</span>
                 <b>{d.getDate()}</b>
@@ -137,6 +185,7 @@ export default function Overview() {
                   </Link>
                 ))}
                 {onSite.length > 0 && <p className="week-site">Auf der Baustelle: {onSite.join(', ')}</p>}
+                {helpersThere.length > 0 && <p className="week-site">Helfer: {helpersThere.map((h) => h.name).join(', ')}</p>}
               </div>
             </li>
           ))}
