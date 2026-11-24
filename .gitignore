@@ -1,0 +1,12 @@
+node_modules
+dist
+.amplify
+amplify_outputs.json
+amplifyconfiguration.json
+.env
+.env.local
+.DS_Store
+*.local
+*.tsbuildinfo
+*.log
+.idea/
