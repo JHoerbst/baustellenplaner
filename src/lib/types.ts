@@ -80,7 +80,7 @@ export type Task = InProject & {
   note?: string | null;
 };
 
-export type Plan = InProject & { title: string; attachment: Attachment; note?: string | null };
+export type Plan = InProject & { title: string; category?: string | null; floor?: string | null; attachment: Attachment; note?: string | null };
 
 export type Assignment = InProject & {
   tradeId?: string | null;

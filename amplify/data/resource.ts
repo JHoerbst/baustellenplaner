@@ -286,6 +286,10 @@ const schema = a.schema({
     .model({
       ...inProject,
       title: a.string().required(),
+      // Free text chosen by the project, e.g. "Grundriss" or "Entwurf".
+      category: a.string(),
+      // Same free text as on rooms, e.g. "EG".
+      floor: a.string(),
       attachment: a.ref('Attachment').required(),
       note: a.string(),
     })

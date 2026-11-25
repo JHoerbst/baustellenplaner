@@ -42,7 +42,8 @@ und am Rechner.
 - **Mängel**: mit Foto, Raum, zuständiger Firma und Frist bis zur Behebung,
   gruppiert nach Firma
 - **Pläne**: Grundrisse und Schnitte als PDF oder Bild, in der App zum
-  Hineinzoomen und Verschieben (Finger, Mausrad, Doppeltipp)
+  Hineinzoomen und Verschieben (Finger, Mausrad, Doppeltipp), geordnet nach
+  eigenen Kategorien wie Grundriss oder Entwurf und nach Geschoss
 - **Fotos**: nach Raum und Datum abgelegt, zum Hineinzoomen; die App erinnert
   vor Putz, Estrich und Trockenbau ans Fotografieren der Leitungen
 - **Firmen**: mehrere Ansprechpersonen je Firma mit Funktion (z.B. Polier),

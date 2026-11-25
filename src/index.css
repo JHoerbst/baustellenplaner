@@ -1534,3 +1534,15 @@ a.sched-name {
 .source-link a {
   color: var(--chalk);
 }
+
+/* ---- Plans: category and floor for the next uploads -------------------- */
+
+.photo-room input {
+  flex: 1;
+  min-width: 0;
+  max-width: 260px;
+}
+
+.photo-room .plan-floor {
+  flex: 0 1 110px;
+}
