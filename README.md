@@ -1,5 +1,9 @@
 # Baustellenplaner
 
+<p align="center">
+  <img src="docs/zollstock.svg" alt="Ein Zollstock, zu einem Haus mit Zubau gebogen" width="620">
+</p>
+
 Termine, Angebote und Aufgaben für Umbau, Zubau oder Hausbau an einem Ort,
 gemeinsam mit allen, die mitplanen. Läuft als Web-App am Handy (installierbar)
 und am Rechner.
