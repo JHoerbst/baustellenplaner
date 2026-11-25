@@ -680,15 +680,21 @@ input[type='file'] {
   font-size: 0.9rem;
 }
 
-/* Stays in view while the fields scroll, so saving never needs scrolling. */
 .form-footer {
   grid-column: 1 / -1;
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  margin-top: 4px;
+}
+
+/* Inside a sheet the footer stays in view while the fields scroll, so saving
+   never needs scrolling. Only there: on a plain page its white background
+   would show as a bar. */
+.sheet .form-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   margin: 4px 0 -16px;
   padding: 8px 0 16px;
   background: var(--sheet);
