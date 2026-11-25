@@ -18,9 +18,8 @@ und am Rechner.
 - **Budget**: ein Gesamtbudget mit Puffer; die App rechnet aus Rechnungen,
   Aufträgen, Bestellungen und den günstigsten offenen Angeboten hoch und
   warnt, bevor es eng wird
-- **Angebote**: pro Gewerk nebeneinander, günstigstes zuerst, mit Abstand zum
-  günstigsten, Stand (angefragt bis beauftragt), Gültigkeit, PDF und Fotos als
-  Anhang; bei beauftragten Angeboten Nachträge und was schon verrechnet und
+- **Angebote**: pro Gewerk nebeneinander im Preisvergleich, mit Stand
+  (angefragt bis beauftragt), Gültigkeit, PDF und Fotos als Anhang; bei beauftragten Angeboten Nachträge und was schon verrechnet und
   bezahlt ist
 - **Zeitplan**: vier Wochen im Blick, Gewerke als Balken, Helfer pro Tag
   antippen, darunter für jeden Tag, für wie viele gekocht wird
