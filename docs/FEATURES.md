@@ -124,7 +124,7 @@ Gewerk, gemeinsame Nutzung ohne Abo und ohne fremden Anbieter.
 
 ## D. Verbesserungen am Bestehenden
 
-- [ ] App-Symbol fürs iPhone (PNG).
+- [x] App-Symbol fürs iPhone (PNG).
 - [x] Bedienung am echten Handy prüfen: Zoom mit zwei Fingern im Plan,
   seitliches Wischen im Zeitplan.
 - [x] Datei-Upload über die Oberfläche durchtesten (Beleg, Anhang, Plan).
