@@ -1461,6 +1461,12 @@ a.sched-name {
   font-variant-numeric: tabular-nums;
 }
 
+/* "ganztags" has to fit the narrow time column. */
+.week-item time.is-all-day {
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
 .week-item span {
   font-size: 0.85rem;
   color: var(--ink-2);

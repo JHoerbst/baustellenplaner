@@ -64,6 +64,8 @@ export type Appointment = InProject & {
   title: string;
   start: string;
   endTime?: string | null;
+  /** No time of day: the whole day, or the time is not known yet. start is then local midnight. */
+  allDay?: boolean | null;
   place?: string | null;
   tradeId?: string | null;
   companyId?: string | null;

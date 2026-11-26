@@ -120,6 +120,8 @@ const schema = a.schema({
       title: a.string().required(),
       start: a.datetime().required(),
       endTime: a.datetime(),
+      // No time of day: the whole day, or the time is not known yet. start is then local midnight.
+      allDay: a.boolean(),
       place: a.string(),
       tradeId: a.id(),
       companyId: a.id(),

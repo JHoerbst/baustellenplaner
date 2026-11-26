@@ -49,7 +49,7 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
 export type Field = {
   name: string;
   label: string;
-  type?: 'text' | 'textarea' | 'date' | 'datetime-local' | 'amount' | 'decimal' | 'integer' | 'select' | 'tel' | 'email' | 'url';
+  type?: 'text' | 'textarea' | 'date' | 'time' | 'datetime-local' | 'amount' | 'decimal' | 'integer' | 'select' | 'tel' | 'email' | 'url';
   options?: { value: string; label: string }[];
   required?: boolean;
   /** Earlier values offered while typing (plain text fields only). */

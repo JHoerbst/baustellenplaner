@@ -43,6 +43,9 @@ const DEFAULT_TIMEZONE = 'Europe/Vienna';
 /** IANA names such as Europe/Vienna; anything else falls back to the default. */
 const TIMEZONE = /^[A-Za-z_]+(\/[A-Za-z0-9_+-]+){1,2}$/;
 
+/** Calendar day (YYYY-MM-DD) of a timestamp in a time zone. */
+const dayIn = (iso: string, timezone: string) => new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date(iso));
+
 const notFound = { statusCode: 404, headers: { 'content-type': 'text/plain; charset=utf-8' }, body: 'Kalender nicht gefunden.' };
 
 type UrlEvent = { queryStringParameters?: Record<string, string | undefined> };
@@ -61,14 +64,16 @@ export const handler = async (event: UrlEvent) => {
   if (!project?.calendarToken || !sameToken(token, project.calendarToken)) return notFound;
 
   const onlyAppointments = nur === 'termine';
+  const timezone = tz && TIMEZONE.test(tz) ? tz : DEFAULT_TIMEZONE;
   const [appointments, companies] = await Promise.all([rowsOf('Appointment', projectId), rowsOf('Company', projectId)]);
   const companyName = (id?: string) => companies.find((c) => c.id === id)?.name as string | undefined;
 
   const events: CalendarEvent[] = appointments.map((a) => ({
     id: a.id,
     title: [a.title, companyName(a.companyId)].filter(Boolean).join(', '),
-    start: a.start,
-    end: a.endTime,
+    // Without a time of day the entry is all-day, on the calendar day it has in the feed's time zone.
+    start: a.allDay ? dayIn(a.start, timezone) : a.start,
+    end: a.allDay ? null : a.endTime,
     location: a.place,
     description: a.note,
     changed: a.updatedAt,
@@ -114,6 +119,6 @@ export const handler = async (event: UrlEvent) => {
       // Calendar apps poll on their own schedule; do not let anything in between keep an old copy.
       'cache-control': 'no-store',
     },
-    body: toIcs(project.name ?? 'Baustellenplaner', events, tz && TIMEZONE.test(tz) ? tz : DEFAULT_TIMEZONE),
+    body: toIcs(project.name ?? 'Baustellenplaner', events, timezone),
   };
 };

@@ -5,7 +5,7 @@ import { orderWarning } from '../lib/materialOrders';
 import { orderStatus } from '../lib/orders';
 import { DEFAULT_HOUSEHOLD, presenceOn } from '../lib/presence';
 import { photoReminders } from '../lib/reminders';
-import { formatDate, euro, isoDay, relativeDay, dayOf, daysUntil, formatTime } from '../lib/format';
+import { formatDate, euro, isoDay, relativeDay, dayOf, daysUntil, appointmentTime } from '../lib/format';
 
 const WEEKDAY_NAMES = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 
@@ -177,7 +177,9 @@ export default function Overview() {
               <div className="week-items">
                 {items.map((t) => (
                   <Link key={t.id} to="/termine" className="week-item">
-                    <time dateTime={t.start}>{formatTime(t.start)}</time>
+                    <time dateTime={t.allDay ? dayOf(t.start) : t.start} className={t.allDay ? 'is-all-day' : undefined}>
+                      {appointmentTime(t)}
+                    </time>
                     <span>
                       <strong>{t.title}</strong>
                       {[companyName(t.companyId), t.place].filter(Boolean).join(', ')}
@@ -198,7 +200,7 @@ export default function Overview() {
                 <li key={t.id} className="row">
                   <div className="row-when">
                     <strong>{formatDate(t.start)}</strong>
-                    <span>{formatTime(t.start)}</span>
+                    <span>{appointmentTime(t)}</span>
                   </div>
                   <div className="row-main">
                     <strong>{t.title}</strong>

@@ -1,10 +1,32 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useApp } from '../lib/app';
-import { today, relativeDay, longDay, dayOf, formatTime } from '../lib/format';
+import { today, relativeDay, longDay, dayOf, formatTime, clockOf, addDays, daysBetween } from '../lib/format';
 import type { Appointment } from '../lib/types';
 import { EntityForm, type Field } from '../ui/EntityForm';
 import { Empty, PageTitle } from '../ui/Layout';
+
+/** The form asks for the day and the times separately; the time may stay empty. */
+function toForm(t: Partial<Appointment>): Record<string, unknown> {
+  const timed = !!t.start && !t.allDay;
+  return { ...t, date: t.start ? dayOf(t.start) : '', from: timed ? clockOf(t.start!) : '', to: timed && t.endTime ? clockOf(t.endTime) : '' };
+}
+
+function fromForm({ date, from, to, ...rest }: Record<string, unknown>, before: Partial<Appointment>): Record<string, unknown> {
+  const at = (day: string, clock: string) => new Date(`${day}T${clock}`);
+  if (!from) return { ...rest, start: at(String(date), '00:00').toISOString(), endTime: null, allDay: true };
+  const start = at(String(date), String(from));
+  let endTime: string | null = null;
+  if (to) {
+    // An appointment that already ran over several days keeps its length in days.
+    const days = before.start && before.endTime && !before.allDay ? Math.max(0, daysBetween(dayOf(before.start), dayOf(before.endTime))) : 0;
+    let end = at(addDays(String(date), days), String(to));
+    // An end before the start means past midnight.
+    if (end <= start) end = at(addDays(String(date), days + 1), String(to));
+    endTime = end.toISOString();
+  }
+  return { ...rest, start: start.toISOString(), endTime, allDay: false };
+}
 
 export default function Appointments() {
   const { appointments, trades, companies, save, store } = useApp();
@@ -22,8 +44,9 @@ export default function Appointments() {
 
   const fields: Field[] = [
     { name: 'title', label: 'Was steht an?', required: true },
-    { name: 'start', label: 'Beginn', type: 'datetime-local', required: true, half: true },
-    { name: 'endTime', label: 'Ende', type: 'datetime-local', half: true },
+    { name: 'date', label: 'Datum', type: 'date', required: true },
+    { name: 'from', label: 'Uhrzeit, falls bekannt', type: 'time', half: true },
+    { name: 'to', label: 'Bis', type: 'time', half: true, showWhen: (inputs) => !!inputs.from },
     { name: 'place', label: 'Ort' },
     { name: 'companyId', label: 'Firma', type: 'select', half: true, options: companies.map((f) => ({ value: f.id, label: f.name })) },
     { name: 'tradeId', label: 'Gewerk', type: 'select', half: true, options: trades.map((g) => ({ value: g.id, label: g.name })) },
@@ -40,8 +63,14 @@ export default function Appointments() {
     <li key={t.id}>
       <button type="button" className="row row--button" onClick={() => setOpened(t)}>
         <div className="row-when">
-          <strong>{formatTime(t.start)}</strong>
-          {t.endTime && <span>bis {formatTime(t.endTime)}</span>}
+          {t.allDay ? (
+            <span>ganztags</span>
+          ) : (
+            <>
+              <strong>{formatTime(t.start)}</strong>
+              {t.endTime && <span>bis {formatTime(t.endTime)}</span>}
+            </>
+          )}
         </div>
         <div className="row-main">
           <strong>{t.title}</strong>
@@ -90,9 +119,9 @@ export default function Appointments() {
         <EntityForm
           title={opened.id ? 'Termin bearbeiten' : 'Neuer Termin'}
           fields={fields}
-          value={opened}
+          value={toForm(opened)}
           onClose={() => setOpened(null)}
-          onSave={(d) => save('Appointment', opened.id, d)}
+          onSave={(d) => save('Appointment', opened.id, fromForm(d, opened))}
           onDelete={opened.id ? () => store.remove('Appointment', opened.id!) : undefined}
         />
       )}

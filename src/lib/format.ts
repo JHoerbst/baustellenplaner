@@ -19,6 +19,13 @@ const noon = (day: string) => new Date(`${day}T12:00`);
 export const formatDate = (value: string) => shortDateFormat.format(noon(dayOf(value)));
 export const longDay = (day: string) => longDayFormat.format(noon(day));
 export const formatTime = (iso: string) => timeFormat.format(new Date(iso));
+/** Time of an appointment for lists; appointments without a time of day read "ganztags". */
+export const appointmentTime = (a: { start: string; allDay?: boolean | null }) => (a.allDay ? 'ganztags' : formatTime(a.start));
+/** ISO timestamp -> local HH:MM, the value of <input type="time">. */
+export function clockOf(iso: string): string {
+  const d = new Date(iso);
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
 
 export function addDays(day: string, n: number): string {
   const d = noon(day);
