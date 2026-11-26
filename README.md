@@ -8,6 +8,15 @@ Termine, Angebote und Aufgaben für Umbau, Zubau oder Hausbau an einem Ort,
 gemeinsam mit allen, die mitplanen. Läuft als Web-App am Handy (installierbar)
 und am Rechner.
 
+<p align="center">
+  <img src="docs/screenshots/uebersicht.png" alt="Übersicht mit den nächsten Terminen und offenen Punkten" width="200">
+  <img src="docs/screenshots/zeitplan.png" alt="Zeitplan mit Gewerken, Helfern und der Zahl der Esser pro Tag" width="200">
+  <img src="docs/screenshots/angebote.png" alt="Angebote eines Gewerks im Preisvergleich" width="200">
+  <img src="docs/screenshots/plan.png" alt="Ein Grundriss, hineingezoomt" width="200">
+</p>
+
+<p align="center"><sub>Die Bilder zeigen erfundene Beispieldaten.</sub></p>
+
 ## Was die App kann
 
 - **Übersicht**: die nächsten 14 Tage auf einen Blick, wer morgen auf der
